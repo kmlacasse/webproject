@@ -15,7 +15,8 @@ class BaseCase(TestCase):
         Account.objects.create(username="rick", name="Rick", password="admin", permissions="0100", email="rick@uwm.edu", phone="2627654321", address="456 Kenwood Blvd., Milwaukee, WI  53211")
         Account.objects.create(username="bill", name="Bill", password="instructor", permissions="0010", email="bill@uwm.edu", phone="4140241357", address="789 Downer Ave., Milwaukee, WI  53211", officehours="Tuesday 5-6pm")
         Account.objects.create(username="ian", name="Ian", password="TA", permissions="0001", email="ian@uwm.edu", phone="4149756420", address="901 Newport Ave., Milwaukee, WI  53211", officehours="MW 11am - Noon")
-
+        #Create some courese.
+        Course.objects.create(courseID="02354", courseName="Digital Logic", lectureSelectionCount="4", labSectionCount="0")
 
 class TestLogin(BaseCase):
     # AT for PBI:  As a user, I want to login so I can issue commands
@@ -68,11 +69,9 @@ class TestSupervisorDeleteCourse(BaseCase):
         # John has a supervisor account
         # John logs in
         self.cmd.callCommand("login john super")
-        # John creates a course which will be deleted
-        ret = self.cmd.callCommand("createCourse 01361 1 3")
-        # John deletes the course
-        ret = self.cmd.callCommand("deleteCourse 01361")
-        self.assertEqual(ret, "Course Introduction to Software Engineering successfully deleted")
+        # John creates a course which will be deleted        # John deletes the course
+        ret = self.cmd.callCommand("deleteCourse 02354")
+        self.assertEqual(ret, "Course Digital Logic successfully deleted")
         # Attempt to view course to verify that it is not there
         ret = self.cmd.callCommand("viewCourse 01361")
         self.assertEqual(ret, "Failed. Course doesn’t exist.")
