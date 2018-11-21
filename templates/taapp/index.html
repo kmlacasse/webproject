@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% block content %}
+  <h1>TA assignment application</h1>
+  <form method="post" action="/">
+  {% csrf_token %}
+  command: <label>
+      <input type="text" name="command"/>
+  </label><input type="submit"/>
+  </form>
+  <div id="out">{{list | safe}}</div>
+{% endblock content %}
