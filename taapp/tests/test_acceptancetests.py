@@ -28,3 +28,17 @@ class TestLogin(BaseCase):
         # Try logging in again to verify that it is not possible because you are already logged in
         ret = self.cmd.callCommand("login john super")
         self.assertEqual(ret, "Failed. User currently logged in")
+
+class TestLogout(BaseCase):
+    # AT for PBI:  As a user, I want to logout so others don't issue commands as me
+
+    def testLogout(self):
+        # John has a supervisor account
+        # John logs in
+        self.cmd.callCommand("login john super")
+        # John logs out
+        ret = self.cmd.callCommand("logout")
+        self.assertEqual(ret, "Goodbye")
+        # Try to issue a command to verify that John is logged out
+        ret = self.cmd.callCommand("logout")
+        self.assertEqual(ret, "Failed. No current user to log out")
