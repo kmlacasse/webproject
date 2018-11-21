@@ -67,3 +67,69 @@ class TestLogout(BaseCase):
         # Attempt to logout with no user logged in
         ret = self.cmd.callCommand("logout")
         self.assertEqual(ret, "Failed. No current user to log out")
+
+class TestDeleteAccount(BaseCase):
+
+    def testDeleteAccountNoUser(self):
+        self.setUp()
+
+        #login in as anyone, using john
+        self.cmd.callCommand("login john super")
+
+        #Let's try to delete an account that doesn't exist
+        ret = self.cmd.callCommand("deleteAccount joseph")
+        self.assertEqual(ret, "Failed. Username doesn't exist.")
+
+        #LOGGING OUT
+        self.cmd.callCommand("logout")
+
+    def testDeleteAccountTA(self):
+        self.setUp()
+
+        #still logged in as john but we will test to make sure that readding data should return None as specified.
+        self.cmd.callCommand("login ian ta")
+
+        ret = self.cmd.callCommand("deleteAccount john")
+        #jerry cannot access it because hes a damn ta. who does he think he is!?
+        self.assertEqual(ret, "Failed. Restricted action.")
+
+        self.cmd.callCommand("logout")
+
+    def testDeleteAccountInstructor(self):
+        self.setUp()
+
+        #still logged in as john but we will test to make sure that readding data should return None as specified.
+        self.cmd.callCommand("login bill instructor")
+
+        ret = self.cmd.callCommand("deleteAccount john")
+        self.assertEqual(ret, "Failed. Restricted action.")
+
+        self.cmd.callCommand("logout")
+
+    def testDeleteAccountSupervisor(self):
+        #login as super John
+        self.setUp()
+
+        self.cmd.callCommand("login john super")
+
+        ret = self.cmd.callCommand("deleteAccount ian")
+        self.assertEqual(ret, "Account ian successfully removed.")
+        self.cmd.callCommand("logout")
+
+    def testDeleteAccountAdministrator(self):
+        self.setUp()
+
+        self.cmd.callCommand("login rick admin")
+        ret = self.cmd.callCommand("deleteAccount bill")
+        self.assertEqual(ret, "Account tim successfully removed.")
+        self.cmd.callCommand("logout")
+
+    def testDeleteAccountCurrent(self):
+        print("testing deleteaccountcurrent")
+
+        self.setUp()
+        self.cmd.callCommand("login john super")
+        ret = self.cmd.callCommand("deleteAccount john")
+
+        self.assertEqual(ret, "Failed. Cannot delete logged in account.")
+        self.cmd.callCommand("logout")
