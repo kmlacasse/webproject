@@ -11,6 +11,7 @@ class BaseCase(TestCase):
     # Use this to setup tests for all cases
     def setUp(self):
         self.cmd = setup.setupCommands()
+        setup.current_user = None
         Account.objects.create(username="john", name="John", password="super", permissions="1000", email="john@uwm.edu", phone="41412344567", address="123 Cramer St., Milwaukee, WI  53211")
         Account.objects.create(username="rick", name="Rick", password="admin", permissions="0100", email="rick@uwm.edu", phone="2627654321", address="456 Kenwood Blvd., Milwaukee, WI  53211")
         Account.objects.create(username="bill", name="Bill", password="instructor", permissions="0010", email="bill@uwm.edu", phone="4140241357", address="789 Downer Ave., Milwaukee, WI  53211", officehours="Tuesday 5-6pm")
@@ -67,3 +68,59 @@ class TestLogout(BaseCase):
         # Attempt to logout with no user logged in
         ret = self.cmd.callCommand("logout")
         self.assertEqual(ret, "Failed. No current user to log out")
+
+
+class TestViewAccount(BaseCase):
+
+    # Unit Tests for the viewAccount command
+
+    def testViewAccountInvalid(self):
+        # John attempts to view account without being logged in
+        ret = self.cmd.callCommand("viewAccount bill")
+        self.assertEqual(ret, "Failed. No user currently logged in")
+
+        # John is logged in
+        setup.current_user = Account.objects.get(username="john")
+
+        # John attempts to view a username that does not exist
+        ret = self.cmd.callCommand("viewAccount person")
+        self.assertEqual(ret, "Failed. No account person")
+
+        # John attempts to view account without all parameters
+        ret = self.cmd.callCommand("viewAccount")
+        self.assertEqual(ret, "Failed. Invalid parameters")
+
+        # John attempts to view account with too many parameters
+        ret = self.cmd.callCommand("viewAccount bill extra")
+        self.assertEqual(ret, "Failed. Invalid parameters")
+
+    def testViewAccountValid(self):
+        # John is logged in
+        setup.current_user = Account.objects.get(username="john")
+
+        # John views an account and can see the private information
+        ret = self.cmd.callCommand("viewAccount bill")
+        self.assertIn("Downer", ret)
+
+        # Now Rick is logged in instead
+        setup.current_user = Account.objects.get(username="rick")
+
+        # Bill views an account and can see the private information
+        ret = self.cmd.callCommand("viewAccount john")
+        self.assertIn("Cramer", ret)
+
+        # Now Bill is logged in instead
+        setup.current_user = Account.objects.get(username="bill")
+
+        # Bill views an account and can only see the public information
+        ret = self.cmd.callCommand("viewAccount john")
+        self.assertIn("John", ret)
+        self.assertNotIn("Cramer", ret)
+
+        # Now Ian is logged in instead
+        setup.current_user = Account.objects.get(username="ian")
+
+        # Ian views an account and can only see the public information
+        ret = self.cmd.callCommand("viewAccount john")
+        self.assertIn("John", ret)
+        self.assertNotIn("Cramer", ret)
