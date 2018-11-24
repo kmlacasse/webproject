@@ -8,7 +8,7 @@ from ..models import Section
 from ..models import CourseMember
 from ..models import SectionMember
 
-class AssignTA(CmdInterface):
+class AssignTAtoLab(CmdInterface):
 
     def action(self, command_input):
         command_items = command_input.split()
@@ -32,20 +32,27 @@ class AssignTA(CmdInterface):
         if (TA.permissions[3] == '0'):
             return "Failed. Username is not a TA."
 
-        course = file.readData(command_items[2], 'Course')
-
-        if course is None:
-            return "Failed. Course does not exist."
-
+        s = (command_items[2])[:-3]
+        print(s)
         courseList = list(CourseMember.objects.filter(account__username=TA.username))
         for i in courseList:
-            if(i.course.courseID == course.courseID):
-                return TA.username + " already assigned to course."
+            print(i.course.courseID)
+            if (i.course.courseID == s):
+                lab = file.readData(command_items[2], 'Section')
 
-        cMember = CourseMember.objects.create(account=TA, course=course)
-        cMember.save()
+                if lab is None:
+                    return "Failed. Lab does not exist."
 
-        return TA.username + " successfully assigned to course."
+                sectMembers = SectionMember.objects.filter(section__sectionID=lab.sectionID)
+                if sectMembers.exists():
+                    return "Failed. Lab already assigned a TA."
+
+                sMember = SectionMember.objects.create(account=TA, section=lab)
+                sMember.save()
+
+                return TA.name + " successfully assigned to lab."
+
+        return "Failed. TA is not assigned to course."
 
 
     def validateInputParameters(self, command_items):

@@ -12,6 +12,7 @@ from .view_lecture import ViewLecture
 from .view_lab import ViewLab
 from .assign_instructor import AssignInstructor
 from .assign_TA import AssignTA
+from .assign_TA_toLab import AssignTAtoLab
 
 # Use a global user variable to track who is logged in
 current_user = None
@@ -46,5 +47,7 @@ def setupCommands():
     cmd.addCommand("assignInstructor", assignInstructor)
     assignTA = AssignTA()
     cmd.addCommand("assignTA", assignTA)
+    assignTAtoLab = AssignTAtoLab()
+    cmd.addCommand("assignTAtoLab", assignTAtoLab)
 
     return cmd
