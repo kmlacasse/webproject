@@ -213,3 +213,31 @@ class TestCreateAccount(BaseCase):
 
         # Ian logs out
         setup.current_user = None
+
+
+class TestViewUsers(BaseCase):
+
+    # Unit Tests for the viewUsers command
+
+    def testViewUsersInvalid(self):
+        # John attempts to view users without being logged in
+        ret = self.cmd.callCommand("viewUsers")
+        self.assertEqual(ret, "Failed. No user currently logged in")
+
+        # John is logged in
+        setup.current_user = Account.objects.get(username="john")
+
+        # John attempts to view users with too many parameters
+        ret = self.cmd.callCommand("viewUsers extra")
+        self.assertEqual(ret, "Failed. Invalid parameters")
+
+    def testViewUsersValid(self):
+        # John is logged in
+        setup.current_user = Account.objects.get(username="john")
+
+        # John views the users
+        ret = self.cmd.callCommand("viewUsers")
+        self.assertIn("John", ret)
+        self.assertIn("Rick", ret)
+        self.assertIn("Bill", ret)
+        self.assertIn("Ian", ret)
