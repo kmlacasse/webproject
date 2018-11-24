@@ -124,3 +124,92 @@ class TestViewAccount(BaseCase):
         ret = self.cmd.callCommand("viewAccount john")
         self.assertIn("John", ret)
         self.assertNotIn("Cramer", ret)
+
+
+class TestCreateAccount(BaseCase):
+
+    # Unit Tests for the create account command
+
+    def testSupervisorCreateAccount(self):
+        # John logs in with a supervisor account
+        setup.current_user = Account.objects.get(username="john")
+
+        # John creates an account which does not yet exist
+        ret = self.cmd.callCommand("createAccount tim default 1000")
+        self.assertEqual(ret, "Account tim successfully added")
+
+        # John attempts to create a duplicate account
+        ret = self.cmd.callCommand("createAccount tim default 1000")
+        self.assertEqual(ret, "Failed. Username currently in use")
+
+        # John logs out
+        setup.current_user = None
+
+    def testCreateAccountInvalidArguments(self):
+        # John logs in with a supervisor account
+        setup.current_user = Account.objects.get(username="john")
+
+        # John passes 0 of 3 arguments
+        ret = self.cmd.callCommand("createAccount")
+        self.assertEqual(ret, "Failed. Invalid parameters")
+
+        # John only passes 1 of 3 arguments
+        ret = self.cmd.callCommand("createAccount todd")
+        self.assertEqual(ret, "Failed. Invalid parameters")
+
+        # John only passes 2 of 3 arguments
+        ret = self.cmd.callCommand("createAccount todd default")
+        self.assertEqual(ret, "Failed. Invalid parameters")
+
+        # John passes too many arguments
+        ret = self.cmd.callCommand("createAccount todd default 1000 extra")
+        self.assertEqual(ret, "Failed. Invalid parameters")
+
+        # John passes an invalid account type for the last argument
+        ret = self.cmd.callCommand("createAccount todd default 0002")
+        self.assertEqual(ret, "Failed. Invalid parameters")
+
+        # John passes a character for the last parameter, which should be a number
+        ret = self.cmd.callCommand("createAccount todd default 000b")
+        self.assertEqual(ret, "Failed. Invalid parameters")
+
+        # John logs out
+        setup.current_user = None
+
+    def testAdministratorCreateAccount(self):
+        # Rick logs into an administrator account
+        setup.current_user = Account.objects.get(username="rick")
+
+        # Rick creates an account which does not yet exist
+        ret = self.cmd.callCommand("createAccount jim default 1000")
+        self.assertEqual(ret, "Account jim successfully added")
+
+        # Rick logs out
+        setup.current_user = None
+
+    def testNoUserCreateAccount(self):
+        # With no one logged in, attempt to create an account
+        ret = self.cmd.callCommand("createAccount sam default 1000")
+        self.assertEqual(ret, "Failed. No user currently logged in")
+
+    def testInstructorCreateAccount(self):
+        # Bill logs into an instructor account
+        setup.current_user = Account.objects.get(username="bill")
+
+        # Bill attempts to create an account
+        ret = self.cmd.callCommand("createAccount sam default 1000")
+        self.assertEqual(ret, "Failed. Restricted action")
+
+        # Bill logs out
+        setup.current_user = None
+
+    def testTACreateAccount(self):
+        # Ian logs into a TA account
+        setup.current_user = Account.objects.get(username="ian")
+
+        # Ian attempts to create an account
+        ret = self.cmd.callCommand("createAccount sam default 1000")
+        self.assertEqual(ret, "Failed. Restricted action")
+
+        # Ian logs out
+        setup.current_user = None
