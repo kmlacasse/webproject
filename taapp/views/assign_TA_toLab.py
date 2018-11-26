@@ -15,14 +15,14 @@ class AssignTAtoLab(CmdInterface):
         valid_params = self.validateInputParameters(command_items)
 
         if not valid_params:
-            return "Failed. Invalid parameters"
+            return "Failed. Invalid parameters."
 
         if setup.current_user is None:
-            return "Failed. No user currently logged in"
+            return "Failed. No user currently logged in."
 
         userPermissions = setup.current_user.permissions
         if userPermissions[0] != '1' and userPermissions[1] != '1':
-            return "Failed. Restricted action"
+            return "Failed. Restricted action."
 
         file = FileIO()
         TA = file.readData(command_items[1], 'Account')
@@ -33,10 +33,9 @@ class AssignTAtoLab(CmdInterface):
             return "Failed. Username is not a TA."
 
         s = (command_items[2])[:-3]
-        print(s)
+
         courseList = list(CourseMember.objects.filter(account__username=TA.username))
         for i in courseList:
-            print(i.course.courseID)
             if (i.course.courseID == s):
                 lab = file.readData(command_items[2], 'Section')
 
