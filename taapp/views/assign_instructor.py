@@ -16,14 +16,14 @@ class AssignInstructor(CmdInterface):
         valid_params = self.validateInputParameters(command_items)
 
         if not valid_params:
-            return "Failed. Invalid parameters"
+            return "Failed. Invalid parameters."
 
         if setup.current_user is None:
-            return "Failed. No user currently logged in"
+            return "Failed. No user currently logged in."
 
         userPermissions = setup.current_user.permissions
         if userPermissions[0] != '1' and userPermissions[1] != '1':
-            return "Failed. Restricted action"
+            return "Failed. Restricted action."
 
         file = FileIO()
         instructor = file.readData(command_items[1], 'Account')
