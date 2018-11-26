@@ -41,12 +41,11 @@ class ViewAccount(CmdInterface):
             return True
         return False
 
-    # TODO add office hours
-
     def displayAllInfo(self, person):
-        ret = person.username + '<br>' + person.email + '<br>' + person.phone + '<br>' + person.address
+        ret = person.username + '<br>' + person.name + '<br>' + person.email + '<br>'
+        ret = ret + person.phone + '<br>' + person.address + '<br>' + person.officehours
         return ret
 
     def displayPublicInfo(self, person):
-        ret = person.username + '<br>' + person.email
+        ret = person.username + '<br>' + person.name + '<br>' + person.email + '<br>' + person.officehours
         return ret
