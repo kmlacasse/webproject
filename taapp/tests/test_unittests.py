@@ -155,7 +155,7 @@ class TestAssignTA(BaseCase):
 
         #username is not an TA
         ret = self.cmd.callCommand("assignTA rick 01361")
-        self.assertEqual(ret, "Failed. Username is not an TA.")
+        self.assertEqual(ret, "Failed. Username is not a TA.")
 
         #course does not exist
         ret = self.cmd.callCommand("assignTA ian 00001")
@@ -179,9 +179,13 @@ class TestAssignTAtoLab(BaseCase):
         #login super
         self.cmd.callCommand("login john super")
 
+        # assign ian to course 01361
+        ret = self.cmd.callCommand("assignTA ian 01361")
+        self.assertEqual(ret, "ian successfully assigned to course.")
+
         #assign ian to lab 01361101
         ret = self.cmd.callCommand("assignTAtoLab ian 01361101")
-        self.assertEqual(ret, "ian successfully assigned to lab.")
+        self.assertEqual(ret, "Ian successfully assigned to lab.")
 
         #attempt to assign ian again
         ret = self.cmd.callCommand("assignTAtoLab ian 01361101")
@@ -205,11 +209,11 @@ class TestAssignTAtoLab(BaseCase):
 
         #username is not an TA
         ret = self.cmd.callCommand("assignTAtoLab rick 01361101")
-        self.assertEqual(ret, "Failed. Username is not an TA.")
+        self.assertEqual(ret, "Failed. Username is not a TA.")
 
         #course does not exist
         ret = self.cmd.callCommand("assignTAtoLab ian 00000000")
-        self.assertEqual(ret, "Failed. Course does not exist.")
+        self.assertEqual(ret, "Failed. TA is not assigned to course.")
 
         #logout super
         self.cmd.callCommand("logout")
