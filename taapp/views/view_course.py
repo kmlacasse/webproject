@@ -25,10 +25,10 @@ class ViewCourse(CmdInterface):
             return "Failed. Course does not exists"
 
         # Print out course information
-        print("Course ID: " + course_item.courseID)
-        print("Name: " + course_item.courseName)
-        print("# of Lectures: " + course_item.lectureSectionCount)
-        print("# of Labs: " + course_item.labSectionCount)
+
+        ret_str = "Course ID: " + course_item.courseID + '<br>' + "Name: " + course_item.courseName + '<br>' + "# of Lectures: " \
+                  + str(course_item.lectureSectionCount) + '<br>' + "# of Labs: " + str(course_item.labSectionCount)
+        return ret_str
 
 
     def validateInputParameters(self, parameters):

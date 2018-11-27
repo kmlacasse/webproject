@@ -13,6 +13,11 @@ from .view_lab import ViewLab
 from .assign_instructor import AssignInstructor
 from .assign_TA import AssignTA
 from .assign_TA_toLab import AssignTAtoLab
+from .edit_account import EditAccount
+from .edit_account import ChangePassword
+from .edit_account import EditAddress
+from .edit_account import EditPhoneNumber
+from .edit_account import EditEmail
 
 # Use a global user variable to track who is logged in
 current_user = None
@@ -49,5 +54,15 @@ def setupCommands():
     cmd.addCommand("assignTA", assignTA)
     assignTAtoLab = AssignTAtoLab()
     cmd.addCommand("assignTAtoLab", assignTAtoLab)
+    editAccount = EditAccount()
+    cmd.addCommand("editAccount", editAccount)
+    changePassword = ChangePassword()
+    cmd.addCommand("changePassword", changePassword)
+    editAddress = EditAddress()
+    cmd.addCommand("editAddress", editAddress)
+    editPhoneNumber = EditPhoneNumber()
+    cmd.addCommand("editPhoneNumber", editPhoneNumber)
+    editEmail = EditEmail()
+    cmd.addCommand("editEmail", editEmail)
 
     return cmd
