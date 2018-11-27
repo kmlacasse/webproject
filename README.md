@@ -6,6 +6,9 @@ Django interface
 AssignTAtoLab
 ViewAccount
 ViewUsers
+ViewCourse
+ViewLecture
+ViewLab
 EditEmail
 EditPhoneNumber
 EditAddress
