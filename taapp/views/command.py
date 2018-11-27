@@ -13,9 +13,13 @@ class Command:
 
     def callCommand(self, command_input):
         cmd = command_input.split()
+        found_command = False
         response = ''
         if self.containsCommand(cmd[0]):
-          response = self.command_dict[cmd[0]].action(command_input)
+            found_command = True
+            response = self.command_dict[cmd[0]].action(command_input)
+        if not found_command:
+            return "Failed. No such command"
         return response
 
     def addCommand(self, command, command_object):
