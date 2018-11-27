@@ -600,7 +600,7 @@ class TestDeleteCourse(BaseCase):
         self.cmd.callCommand("login john super")
 
         retString = self.cmd.callCommand("deleteCourse 01361")
-        self.assertEqual(retString, "Course 013611 successfully removed.")
+        self.assertEqual(retString, "Course 01361 successfully removed.")
         self.cmd.callCommand("logout")
 
     def testDeleteCourseAdministrator(self):

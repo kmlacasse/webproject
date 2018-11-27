@@ -10,17 +10,17 @@ class DeleteAccount(CmdInterface):
         valid_params = self.validateInputParameters(command_items)
 
         if not valid_params:
-            return "Failed. Invalid parameters"
+            return "Failed. Invalid parameters."
 
         if setup.current_user is None:
-            return "Failed. No user currently logged in"
+            return "Failed. No user currently logged in."
 
         if setup.current_user.username == command_items[1]:
             return "Failed. Cannot delete logged in account."
 
         current_user_permissions = setup.current_user.permissions
         if current_user_permissions[0] == '0' and current_user_permissions[1] == '0':
-            return "Failed. Restricted action"
+            return "Failed. Restricted action."
 
         file = FileIO()
         account = file.readData(command_items[1], "Account")
