@@ -8,6 +8,7 @@ from ..models import Section
 from ..models import CourseMember
 from ..models import SectionMember
 
+
 class AssignTAtoLab(CmdInterface):
 
     def action(self, command_input):
