@@ -1,9 +1,11 @@
 from . import setup
 from .cmd_interface import CmdInterface
 from .file_io import FileIO
+from ..models import Account
 from ..models import Section
+from ..models import SectionMember
 
-
+#viewLab(01361-101)
 class ViewLab(CmdInterface):
     def action(self, command_input):
 
@@ -17,8 +19,22 @@ class ViewLab(CmdInterface):
         if not valid_params:
             return "Failed. Invalid parameters"
 
+        file = FileIO()
+        section_data = file.readData(command_items[1], 'Section')
+        if section_data is None:
+            return "Failed. Lab section does not exist"
+
+        TA_name = ""
+        section_member = file.readData(section_data, 'SectionMember')
+        if section_member is not None:
+            # Means that there is an instructor assigned to the lecture
+            TA_name += section_member.account.name
+
+
+        ret_str = "Lab ID: " + command_items[1] + '<br>' + "Section Name: " + section_data.sectionName + '<br>' +  "TA: " + Ta_name
+        return ret_str
+
     def validateInputParameters(self, parameters):
-        # Need to check that the courseID is a 5 digit positive integer (> 99999)
         if len(parameters) != 2:
             return False
 

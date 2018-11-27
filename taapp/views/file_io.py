@@ -1,6 +1,8 @@
 from ..models import Account
 from ..models import Course
 from ..models import Section
+from ..models import CourseMember
+from ..models import SectionMember
 from .io_interface import IOInterface
 import csv
 # Database names can be:
@@ -21,8 +23,12 @@ class FileIO(IOInterface):
                 current = Course.objects.get(pk=key)
             elif database == "Section":
                 current = Section.objects.get(pk=key)
+            elif database == "CourseMember":
+                current = CourseMember.objects.get(pk=key)
+            elif database == "SectionMember":
+                current = SectionMember.objects.get(pk=key)
             return current
-        except (Account.DoesNotExist, Course.DoesNotExist, Section.DoesNotExist):
+        except (Account.DoesNotExist, Course.DoesNotExist, Section.DoesNotExist, CourseMember.DoesNotExist, SectionMember.DoesNotExist):
             # The primary key does not exist in the database, so return None
             return None
 
