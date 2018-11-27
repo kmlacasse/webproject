@@ -47,7 +47,6 @@ class TestLogout(BaseCase):
         self.assertEqual(ret, "Failed. No current user to log out")
 
 
-@skip("Wait for the viewCourse command")
 class TestSupervisorCreateCourse(BaseCase):
     # AT for PBI:  As a Supervisor, I want to create a course
 
@@ -161,7 +160,6 @@ class TestSupervisorEmailUsers(BaseCase):
         self.assertEqual(ret, "Email successfully sent to users")
 
 
-@skip("Save for a future Sprint")
 class TestSupervisorViewCourse(BaseCase):
     # AT for PBI:  As a supervisor, I want to see the number of sections per course,
     # to determine the minimum number of instructors to assign
@@ -238,7 +236,7 @@ class TestSupervisorAssignTAtoCourse(BaseCase):
         self.assertIn("ian", ret)
 
 
-@skip("Wait for assign TA to Lab command")
+@skip("Wait for this to be implemented")
 class TestSupervisorAssignTAtoLab(BaseCase):
     # AT for PBI:  As a supervisor, I would like to be able to assign TAs to specific lab sections,
     # so that TAs can work around their schedule
@@ -256,8 +254,10 @@ class TestSupervisorAssignTAtoLab(BaseCase):
         self.cmd.callCommand("createCourse 01361 1 3 Introduction to Software Engineering")
         # Create a TA
         self.cmd.callCommand("createAccount ian pass123 0001")
+        # John assigns a TA to a course
+        ret = self.cmd.callCommand("assignTA ian 01361")
         # John assigns a TA to a lab section
-        ret = self.cmd.callCommand("assignTAtoLab ian 01361 1")
+        ret = self.cmd.callCommand("assignTAtoLab ian 01361101")
         self.assertIn("ian successfully assigned", ret)
         # View course to verify that TA is listed
         ret = self.cmd.callCommand("viewCourse 01361")
@@ -282,14 +282,13 @@ class TestSupervisorAssignInstructortoCourse(BaseCase):
         # Create an instructor
         self.cmd.callCommand("createAccount tim default 0010")
         # John assigns an instructor to a course
-        ret = self.cmd.callCommand("assignInstructor tim 01361")
+        ret = self.cmd.callCommand("assignInstructor tim 013611")
         self.assertIn("tim successfully assigned", ret)
         # View course to verify that instructor is listed
         ret = self.cmd.callCommand("viewCourse 01361")
         self.assertIn("tim", ret)
 
 
-@skip("Wait for viewCourse")
 class TestAdministratorCreateCourse(BaseCase):
     # AT for PBI:  As an administrator, I want to create a course
 

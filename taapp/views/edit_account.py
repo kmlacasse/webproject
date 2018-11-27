@@ -93,17 +93,23 @@ class EditAddress(CmdInterface):
         if user_check is None:
             return "Failed. Username doesn't exist"
 
-    def validateInputParameters(self, command_items):
-        if len(command_items) != 3:
-            return False
-
-        return True
-
         user = Account.objects.get(username=command_items[1])
-        user.address = command_items[2]
+
+        # Address can have spaces so group all parts together
+        address = ""
+        for word in command_items[2:]:
+            address += word + " "
+
+        user.address = address
         user.save()
 
         return "Address successfully changed"
+
+    def validateInputParameters(self, command_items):
+        if len(command_items) < 3:
+            return False
+
+        return True
 
 
 class EditPhoneNumber(CmdInterface):

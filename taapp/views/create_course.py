@@ -40,12 +40,12 @@ class CreateCourse(CmdInterface):
         # Creating database lectures
         for i in range(int(command_items[2])):
             # create(sections uniqueID:lecture , section type:1 , parent course uniqueID)
-            new_lecture = Section.objects.create(sectionID=((command_items[1]) + "-" + str(i)), sectionType=1, parentCourse=new_coursek, sectionName=course_name + " - Lecture " + i)
+            new_lecture = Section.objects.create(sectionID=((command_items[1]) + str(i+1)), sectionType=1, parentCourse=new_course, sectionName=course_name + " - Lecture " + str(i))
             new_lecture.save()
 
         # Creating database labs
         for j in range(int(command_items[3])):
-            new_lab = Section.objects.create(sectionID=((command_items[1]) + "-" + str(j+100)), sectionType=0, parentCourse=new_course, sectionName=course_name + " - Lab " + j)
+            new_lab = Section.objects.create(sectionID=((command_items[1]) + str(j+101)), sectionType=0, parentCourse=new_course, sectionName=course_name + " - Lab " + str(j))
             new_lab.save()
 
         return "Course " + course_name + " successfully added"

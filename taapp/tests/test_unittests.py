@@ -125,6 +125,7 @@ class TestAssignInstructor(BaseCase):
         ret = self.cmd.callCommand("assignInstructor bill 013611")
         self.assertEqual(ret, "Failed. Restricted action.")
 
+
 class TestAssignTA(BaseCase):
 
     # Unit Tests for assignTA command
@@ -170,6 +171,7 @@ class TestAssignTA(BaseCase):
         #attempt to assignTA
         ret = self.cmd.callCommand("assignTA ian 01361")
         self.assertEqual(ret, "Failed. Restricted action.")
+
 
 class TestAssignTAtoLab(BaseCase):
 
@@ -398,6 +400,7 @@ class TestViewUsers(BaseCase):
         self.assertIn("Bill", ret)
         self.assertIn("Ian", ret)
 
+
 class TestCreateCourse(BaseCase):
     def testSupervisorCreateCourse(self):
         # John logs in with a supervisor account
@@ -405,7 +408,7 @@ class TestCreateCourse(BaseCase):
 
         # John creates a course which does not yet exist
         ret = self.cmd.callCommand("createCourse 02150 1 1 Intro to Electrical Engineering")
-        self.assertEqual(ret, "Course Intro to Electrical Engineering successfully added")
+        self.assertEqual(ret, "Course Intro to Electrical Engineering  successfully added")
 
         # John attempts to duplicate the course
         ret = self.cmd.callCommand("createCourse 02150 1 1 Intro to Electrical Engineering")
@@ -420,7 +423,7 @@ class TestCreateCourse(BaseCase):
 
         # Rick creates a course which does not yet exist
         ret = self.cmd.callCommand("createCourse 02150 1 1 Intro to Electrical Engineering")
-        self.assertEqual(ret, "Course Intro to Electrical Engineering successfully added")
+        self.assertEqual(ret, "Course Intro to Electrical Engineering  successfully added")
 
         # Rick logs out
         setup.current_user = None
@@ -467,6 +470,7 @@ class TestCreateCourse(BaseCase):
         #John logs out
         setup.current_user = None
 
+
 class TestViewCourse(BaseCase):
     def testViewCourseValid(self):
         # John logs in
@@ -474,7 +478,7 @@ class TestViewCourse(BaseCase):
 
         # John views the course
         ret = self.cmd.callCommand("viewCourse 01361")
-        self.assertIn("Intro to Electrical Engineering", ret)
+        self.assertIn("Introduction to Software Engineering", ret)
 
         #John logs out
         setup.current_user = None
@@ -489,13 +493,7 @@ class TestViewCourse(BaseCase):
 
         # John attempts to view non existing course
         ret = self.cmd.callCommand("viewCourse 02300")
-        self.assertEqual(ret, "Failed. Course does not exist")
+        self.assertEqual(ret, "Failed. Course does not exists")
 
         # John logs out
         setup.current_user = None
-
-
-
-
-
-

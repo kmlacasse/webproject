@@ -27,7 +27,7 @@ class ViewCourse(CmdInterface):
         # Print out course information
 
         ret_str = "Course ID: " + course_item.courseID + '<br>' + "Name: " + course_item.courseName + '<br>' + "# of Lectures: " \
-                  + course_item.lectureSectionCount + '<br>' + "# of Labs: " + course_item.labSectionCount
+                  + str(course_item.lectureSectionCount) + '<br>' + "# of Labs: " + str(course_item.labSectionCount)
         return ret_str
 
 
