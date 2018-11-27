@@ -497,3 +497,129 @@ class TestViewCourse(BaseCase):
 
         # John logs out
         setup.current_user = None
+
+class TestDeleteAccount(BaseCase):
+
+    def testDeleteAccountNoUser(self):
+
+
+        #login in as anyone, using john
+        self.cmd.callCommand("login john super")
+
+        #Let's try to delete an account that doesn't exist
+        retString = self.cmd.callCommand("deleteAccount joseph")
+        self.assertEqual(retString, "Failed. Username doesn't exist.")
+
+        #LOGGING OUT
+        self.cmd.callCommand("logout")
+
+    def testDeleteAccountTA(self):
+
+
+        #still logged in as john but we will test to make sure that readding data should return None as specified.
+        self.cmd.callCommand("login ian TA")
+
+        retString = self.cmd.callCommand("deleteAccount john")
+        #jerry cannot access it because hes a damn ta. who does he think he is!?
+        self.assertEqual(retString, "Failed. Restricted action.")
+
+        self.cmd.callCommand("logout")
+
+    def testDeleteAccountInstructor(self):
+
+
+        #still logged in as john but we will test to make sure that readding data should return None as specified.
+        self.cmd.callCommand("login bill instructor")
+
+        retString = self.cmd.callCommand("deleteAccount john")
+        #jerry cannot access it because hes a damn ta. who does he think he is!?
+        self.assertEqual(retString, "Failed. Restricted action.")
+
+        self.cmd.callCommand("logout")
+
+    def testDeleteAccountSupervisor(self):
+        #login as super John
+
+
+        self.cmd.callCommand("login john super")
+
+        retString = self.cmd.callCommand("deleteAccount ian")
+        self.assertEqual(retString, "Account ian successfully removed.")
+        self.cmd.callCommand("logout")
+
+    def testDeleteAccountAdministrator(self):
+
+
+        self.cmd.callCommand("login rick admin")
+        retString = self.cmd.callCommand("deleteAccount ian")
+        self.assertEqual(retString, "Account ian successfully removed.")
+        self.cmd.callCommand("logout")
+
+    def testDeleteAccountCurrent(self):
+
+
+        self.cmd.callCommand("login john super")
+        retString = self.cmd.callCommand("deleteAccount john")
+
+        self.assertEqual(retString, "Failed. Cannot delete logged in account.")
+
+        self.cmd.callCommand("Failed. Cannot delete logged in account.")
+
+        self.cmd.callCommand("logout")
+
+
+class TestDeleteCourse(BaseCase):
+
+    def testTestDeleteCourseTA(self):
+
+        #still logged in as john but we will test to make sure that readding data should return None as specified.
+        self.cmd.callCommand("login ian TA")
+
+        retString = self.cmd.callCommand("deleteCourse 01361")
+        #jerry cannot access it because hes a damn ta. who does he think he is!?
+        self.assertEqual(retString, "Failed. Restricted action.")
+
+        self.cmd.callCommand("logout")
+
+    def testDeleteCourseInstructor(self):
+
+
+        #still logged in as john but we will test to make sure that readding data should return None as specified.
+        self.cmd.callCommand("login bill instructor")
+
+        retString = self.cmd.callCommand("deleteCourse 01361")
+        #jerry cannot access it because hes a damn ta. who does he think he is!?
+        self.assertEqual(retString, "Failed. Restricted action.")
+
+        self.cmd.callCommand("logout")
+
+    def testDeleteCourseSupervisor(self):
+
+
+        #login as super John
+        self.cmd.callCommand("login john super")
+
+        retString = self.cmd.callCommand("deleteCourse 01361")
+        self.assertEqual(retString, "Course 013611 successfully removed.")
+        self.cmd.callCommand("logout")
+
+    def testDeleteCourseAdministrator(self):
+
+
+        self.cmd.callCommand("login rick admin")
+        retString = self.cmd.callCommand("deleteCourse 01361")
+        self.assertEqual(retString, "Course 01361 successfully removed.")
+        self.cmd.callCommand("logout")
+
+    def testDeleteCourseNoCourse(self):
+
+
+        #login in as anyone, using john
+        self.cmd.callCommand("login john super")
+
+        #Let's try to delete an account that doesn't exist
+        retString = self.cmd.callCommand("deleteCourse 013619")
+        self.assertEqual(retString, "Failed. Course 013619 doesn't exist.")
+
+        #LOGGING OUT
+        self.cmd.callCommand("logout")
