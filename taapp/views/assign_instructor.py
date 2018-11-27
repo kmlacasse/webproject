@@ -51,7 +51,7 @@ class AssignInstructor(CmdInterface):
         sMember = SectionMember.objects.create(account=instructor, section=lecture)
         sMember.save()
 
-        return instructor.username + "successfully assigned to lecture."
+        return instructor.username + " successfully assigned to lecture."
 
 
     def validateInputParameters(self, command_items):
