@@ -394,3 +394,104 @@ class TestViewUsers(BaseCase):
         self.assertIn("Bill", ret)
         self.assertIn("Ian", ret)
 
+class TestCreateCourse(BaseCase):
+    def testSupervisorCreateCourse(self):
+        # John logs in with a supervisor account
+        setup.current_user = Account.objects.get(username="john")
+
+        # John creates a course which does not yet exist
+        ret = self.cmd.callCommand("createCourse 02150 1 1 Intro to Electrical Engineering")
+        self.assertEqual(ret, "Course Intro to Electrical Engineering successfully added")
+
+        # John attempts to duplicate the course
+        ret = self.cmd.callCommand("createCourse 02150 1 1 Intro to Electrical Engineering")
+        self.assertEqual(ret, "Failed. Course already exists")
+
+        # John logs out
+        setup.current_user = None
+
+    def testAdministratorCreateCourse(self):
+        # Rick logs in with a administrator account
+        setup.current_user = Account.objects.get(username="rick")
+
+        # Rick creates a course which does not yet exist
+        ret = self.cmd.callCommand("createCourse 02150 1 1 Intro to Electrical Engineering")
+        self.assertEqual(ret, "Course Intro to Electrical Engineering successfully added")
+
+        # Rick logs out
+        setup.current_user = None
+
+    def testInstructorCreateCourse(self):
+        # Bill logs into an instructor account
+        setup.current_user = Account.objects.get(username="bill")
+
+        # Bill attempts to create a course
+        ret = self.cmd.callCommand("createCourse 02150 1 1 Intro to Electrical Engineering")
+        self.assertEqual(ret, "Failed. Restricted action")
+
+        # Bill logs out
+        setup.current_user = None
+
+    def testTACreateCourse(self):
+        # Ian logs into a TA account
+        setup.current_user = Account.objects.get(username="ian")
+
+        # Ian attempts to create a course
+        ret = self.cmd.callCommand("createCourse 02150 1 1 Intro to Electrical Engineering")
+        self.assertEqual(ret, "Failed. Restricted action")
+
+        # Ian logs out
+        setup.current_user = None
+
+    def testNoUserCreateCourse(self):
+        # Nobody logged in, attempt to create a course
+        ret = self.cmd.callCommand("createCourse 02150 1 1 Intro to Electrical Engineering")
+        self.assertEqual(ret, "Failed. No user currently logged in")
+
+    def testInvalidParametersCreateCourse(self):
+        # John logs in with supervisor account
+        setup.current_user = Account.objects.get(username="john")
+
+        # Invalid lecture count
+        ret = self.cmd.callCommand("createCourse 02150 0 1 Intro to Electrical Engineering")
+        self.assertEqual(ret, "Failed. Invalid parameters")
+
+        # Invalid lab count
+        ret = self.cmd.callCommand("createCourse 02150 1 -1 Intro to Electrical Engineering")
+        self.assertEqual(ret, "Failed. Invalid parameters")
+
+        #John logs out
+        setup.current_user = None
+
+class TestViewCourse(BaseCase):
+    def testViewCourseValid(self):
+        # John logs in
+        setup.current_user = Account.objects.get(username="john")
+
+        # John views the course
+        ret = self.cmd.callCommand("viewCourse 01361")
+        self.assertIn("Intro to Electrical Engineering", ret)
+
+        #John logs out
+        setup.current_user = None
+
+    def testViewCourseInvalid(self):
+        # No user logged in attempts to view course
+        ret = self.cmd.callCommand("viewCourse 01361")
+        self.assertEqual(ret, "Failed. No user currently logged in")
+
+        # John logs in
+        setup.current_user = Account.objects.get(username="john")
+
+        # John attempts to view non existing course
+        ret = self.cmd.callCommand("viewCourse 02300")
+        self.assertEqual(ret, "Failed. Course does not exist")
+
+        # John logs out
+        setup.current_user = None
+
+
+
+
+
+

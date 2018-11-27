@@ -33,7 +33,6 @@ class Section(models.Model):
     #Lab = 0, Lecture = 1
     sectionType = models.IntegerField()
 
-    #formerly named whichcourse
     parentCourse = models.ForeignKey(Course, on_delete=models.CASCADE)
 
 
