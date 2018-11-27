@@ -16,9 +16,10 @@ class EditAccount(CmdInterface):
         if setup.current_user is None:
             return "Failed. No user currently logged in"
 
-        current_user_permissions = setup.current_user.permissions
-        if current_user_permissions[0] != '1' and current_user_permissions[1] != '1':
-            return "Failed. Restricted action"
+        if setup.current_user.username != command_items[1]:
+            current_user_permissions = setup.current_user.permissions
+            if current_user_permissions[0] != '1' and current_user_permissions[1] != '1':
+                return "Failed. Restricted action"
 
         file = FileIO()
         user_check = file.readData(command_items[1], 'Account')
@@ -50,9 +51,10 @@ class ChangePassword(CmdInterface):
         if setup.current_user is None:
             return "Failed. No user currently logged in"
 
-        current_user_permissions = setup.current_user.permissions
-        if current_user_permissions[0] != '1' and current_user_permissions[1] != '1':
-            return "Failed. Restricted action"
+        if setup.current_user.username != command_items[1]:
+            current_user_permissions = setup.current_user.permissions
+            if current_user_permissions[0] != '1' and current_user_permissions[1] != '1':
+                return "Failed. Restricted action"
 
         file = FileIO()
         user_check = file.readData(command_items[1], 'Account')
@@ -84,9 +86,10 @@ class EditAddress(CmdInterface):
         if setup.current_user is None:
             return "Failed. No user currently logged in"
 
-        current_user_permissions = setup.current_user.permissions
-        if current_user_permissions[0] != '1' and current_user_permissions[1] != '1':
-            return "Failed. Restricted action"
+        if setup.current_user.username != command_items[1]:
+            current_user_permissions = setup.current_user.permissions
+            if current_user_permissions[0] != '1' and current_user_permissions[1] != '1':
+                return "Failed. Restricted action"
 
         file = FileIO()
         user_check = file.readData(command_items[1], 'Account')
@@ -123,10 +126,10 @@ class EditPhoneNumber(CmdInterface):
 
         if setup.current_user is None:
             return "Failed. No user currently logged in"
-
-        current_user_permissions = setup.current_user.permissions
-        if current_user_permissions[0] != '1' and current_user_permissions[1] != '1':
-            return "Failed. Restricted action"
+        if setup.current_user.username != command_items[1]:
+            current_user_permissions = setup.current_user.permissions
+            if current_user_permissions[0] != '1' and current_user_permissions[1] != '1':
+                return "Failed. Restricted action"
 
         file = FileIO()
         user_check = file.readData(command_items[1], 'Account')
@@ -158,9 +161,10 @@ class EditEmail(CmdInterface):
         if setup.current_user is None:
             return "Failed. No user currently logged in"
 
-        current_user_permissions = setup.current_user.permissions
-        if current_user_permissions[0] != '1' and current_user_permissions[1] != '1':
-            return "Failed. Restricted action"
+        if setup.current_user.username != command_items[1]:
+            current_user_permissions = setup.current_user.permissions
+            if current_user_permissions[0] != '1' and current_user_permissions[1] != '1':
+                return "Failed. Restricted action"
 
         file = FileIO()
         user_check = file.readData(command_items[1], 'Account')
