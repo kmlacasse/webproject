@@ -14,3 +14,4 @@ EditPhoneNumber
 EditAddress
 ChangePassword
 
+The command AssignTAtoLab will be modified next sprint to allow an instructor to assign TAs for their own courses.  Currently supervisors and admins have that ability.
