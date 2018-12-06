@@ -1,0 +1,10 @@
+.container {
+    width: 80%;
+}
+header {
+    background: darkkhaki;
+}
+
+nav li {
+    display: inline-block;
+}
