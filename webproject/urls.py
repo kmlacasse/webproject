@@ -16,12 +16,14 @@ Including another URLconf
 from django.conf.urls import url
 from django.contrib import admin
 from django.urls import path
-from taapp.views.views import Home
-from taapp.views.views import Modify
+from taapp.views.views import *
 
 urlpatterns = [
     url(r'admin/', admin.site.urls),
     path('', Home.as_view()),
+    path(r'home.html', Home.as_view()),
     path(r'modify.html', Modify.as_view()),
+    path(r'view.html', View.as_view()),
+    path(r'create_course.html', CreateCourse.as_view()),
 
 ]
