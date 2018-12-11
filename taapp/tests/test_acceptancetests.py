@@ -145,10 +145,26 @@ class TestSupervisorEditAccount(BaseCase):
         # Assume John can see the account changes
 
 
-class TestSupervisorViewCourse(BaseCase):
+class TestSupervisorViewSectionsCourse(BaseCase):
     # AT for PBI 8:  As a supervisor, I want to see the number of sections per course through a webpage,
     # to determine the minimum number of instructors to assign
 
+    def tearDown(self):
+        # Remove the created course
+        self.cmd.callCommand("deleteCourse 01361")
+
+    def testSupervisorViewSectionsCourse(self):
+        # John has a supervisor account
+        # John logs in
+        self.cmd.callCommand("login john super")
+        # Create a course which will be viewed
+        self.cmd.callCommand("createCourse 01361 1 3 Introduction to Software Engineering")
+        # John views a course which exists
+        ret = self.cmd.callCommand("viewCourse 01361")
+        self.assertIn("Introduction to Software Engineering", ret)
+
+
+class TestSupervisorViewLabsCourse(BaseCase):
     # Also AT for PBI 9:  As a supervisor, I would like to be able to see the number of lab sections
     # through a webpage, so that I know the minimum number of TAs required
 
@@ -156,7 +172,7 @@ class TestSupervisorViewCourse(BaseCase):
         # Remove the created course
         self.cmd.callCommand("deleteCourse 01361")
 
-    def testSupervisorViewCourse(self):
+    def testSupervisorViewLabsCourse(self):
         # John has a supervisor account
         # John logs in
         self.cmd.callCommand("login john super")
@@ -462,3 +478,20 @@ class TestTAViewPublicInfo(BaseCase):
         # Assume instructor bill exists
         ret = self.cmd.callCommand("viewAccount bill")
         self.assertIn("bill", ret)
+
+
+@skip("Need to implement")
+class TestAccessWebsite(BaseCase):
+    # AT for PBI 26: As a visitor, I can access the homepage
+
+    def testAccessWebsite(self):
+        pass
+
+
+@skip("Need to implement")
+class TestUserLogin(BaseCase):
+    # AT for PBI 27: As a user, I can login through the webpage
+
+    def testUserLogin(self):
+        pass
+
