@@ -20,11 +20,15 @@ from taapp.views.views import Home
 
 urlpatterns = [
     url(r'admin/', admin.site.urls),
+
+    url(r'create_course/', Home.get("create_course.html"), name="create_course.html"),
+
     url(r'home/', Home.index, name='home.html'),
     url(r'modify/', Home.index, name='modify.html'),
     url(r'view/', Home.index, name='view.html'),
     url(r'login/', Home.index, name='login.html'),
-    url(r'logout/', Home.index, name='home.html'),
+
 
     path('', Home.as_view()),
+    path()
 ]

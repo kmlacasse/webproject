@@ -30,9 +30,18 @@ p1 {
     display: inline;
     color: green;
 }
-
+/* Used in home page */
 #signUpButton {
     display: inline;
 }
 
+.formText {
+    padding-left: 20px;
+    color: black;
+}
+
+.fields {
+    line-height: 25px;
+
+}
 
