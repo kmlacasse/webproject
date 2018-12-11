@@ -373,6 +373,52 @@ class TestCreateAccount(BaseCase):
         setup.current_user = None
 
 
+class TestEditAccount(BaseCase):
+
+    # Unit Tests for the editAccount command
+
+    def testEditAccountInvalid(self):
+        # No user logged in
+        setup.current_user = None
+
+        # Attempt to change Bill's password
+        ret = self.cmd.callCommand("changePassword bill invalid")
+        self.assertEqual(ret, "Failed. No user currently logged in")
+
+        # Bill logs in
+        setup.current_user = Account.objects.get(username="bill")
+
+        # Bill enters invalid parameters
+        ret = self.cmd.callCommand("changePassword bill")
+        self.assertEqual(ret, "Failed. Invalid parameters")
+
+        # Bill tries to edit John's password
+        ret = self.cmd.callCommand("changePassword john invalid")
+        self.assertEqual(ret, "Failed. Restricted action")
+
+        # Bill logs out and John logs in
+        setup.current_user = Account.objects.get(username="john")
+
+        # John tries to change Mike's password, Mike doesn't exist
+        ret = self.cmd.callCommand("changePassword mike invalid")
+        self.assertEqual(ret, "Failed. Username doesn't exist")
+
+    def testEditAccountValid(self):
+        # Bill logs in
+        setup.current_user = Account.objects.get(username="bill")
+
+        # Bill changes his password
+        ret = self.cmd.callCommand("changePassword bill valid")
+        self.assertEqual(ret, "bill password successfully changed")
+
+        # Bill logs out and John logs in
+        setup.current_user = Account.objects.get(username="john")
+
+        # John changes Bill's password back
+        ret = self.cmd.callCommand("changePassword bill instructor")
+        self.assertEqual(ret, "bill password successfully changed")
+
+
 class TestViewUsers(BaseCase):
 
     # Unit Tests for the viewUsers command
