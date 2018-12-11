@@ -13,5 +13,13 @@ class Home(View):
         s = cmd.callCommand(request.POST["command"])
         return render(request, "taapp/home.html", {"list":s})
 
-    def index(self, request):
-        return render(request, "taapp/home.html")
+
+class Modify(View):
+    def get(self, request):
+        return render(request, "taapp/modify.html")
+
+    def post(self,request):
+        cmd = setup.setupCommands()
+        cmd.text = request.POST["command"]
+        s = cmd.callCommand(request.POST["command"])
+        return render(request, "taapp/modify.html", {"list":s})

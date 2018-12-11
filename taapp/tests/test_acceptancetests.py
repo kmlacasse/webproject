@@ -20,7 +20,7 @@ class BaseCase(TestCase):
 
 
 class TestLogin(BaseCase):
-    # AT for PBI:  As a user, I want to login so I can issue commands
+    # AT for PBI 1:  As a user, I want to login through a webpage so I can issue commands
 
     def testLogin(self):
         # John has a supervisor account
@@ -33,7 +33,7 @@ class TestLogin(BaseCase):
 
 
 class TestLogout(BaseCase):
-    # AT for PBI:  As a user, I want to logout so others don't issue commands as me
+    # AT for PBI 2:  As a user, I want to logout through a webpage so others don't issue commands as me
 
     def testLogout(self):
         # John has a supervisor account
@@ -48,7 +48,7 @@ class TestLogout(BaseCase):
 
 
 class TestSupervisorCreateCourse(BaseCase):
-    # AT for PBI:  As a Supervisor, I want to create a course
+    # AT for PBI 3:  As a Supervisor, I want to create a course through a webpage
 
     def tearDown(self):
         # Remove the created course
@@ -67,14 +67,14 @@ class TestSupervisorCreateCourse(BaseCase):
 
 
 class TestSupervisorDeleteCourse(BaseCase):
-    # AT for PBI:  As a Supervisor, I want to delete a course
+    # AT for PBI 4:  As a Supervisor, I want to delete a course through a webpage
 
     def testSupervisorDeleteCourse(self):
         # John has a supervisor account
         # John logs in
         self.cmd.callCommand("login john super")
         # John creates a course which will be deleted
-        ret = self.cmd.callCommand("createCourse 01361 1 3 Introduction to Software Engineering")
+        self.cmd.callCommand("createCourse 01361 1 3 Introduction to Software Engineering")
         # John deletes the course
         ret = self.cmd.callCommand("deleteCourse 01361")
         self.assertEqual(ret, "Course 01361 successfully removed.")
@@ -84,7 +84,7 @@ class TestSupervisorDeleteCourse(BaseCase):
 
 
 class TestSupervisorCreateAccount(BaseCase):
-    # AT for PBI:  As a Supervisor, I want to create an account
+    # AT for PBI 5:  As a Supervisor, I want to create an account through a webpage
 
     def tearDown(self):
         # Remove the created account
@@ -104,8 +104,7 @@ class TestSupervisorCreateAccount(BaseCase):
 
 
 class TestSupervisorDeleteAccount(BaseCase):
-    # AT for PBI:  As a Supervisor, I want to delete an account
-
+    # AT for PBI 6:  As a Supervisor, I want to delete an account through a webpage
 
     def testSupervisorDeleteAccount(self):
         # John has a supervisor account
@@ -124,7 +123,7 @@ class TestSupervisorDeleteAccount(BaseCase):
 
 @skip("Save for a future Sprint")
 class TestSupervisorEditAccount(BaseCase):
-    # AT for PBI:  As a Supervisor, I want to edit an account
+    # AT for PBI 7:  As a Supervisor, I want to edit an account through a webpage
 
     def tearDown(self):
         # Remove the created and modified account
@@ -146,32 +145,15 @@ class TestSupervisorEditAccount(BaseCase):
         # Assume John can see the account changes
 
 
-@skip("Save for a future Sprint")
-class TestSupervisorEmailUsers(BaseCase):
-    # AT for PBI:  As a supervisor, I want to send out notifications to users via UWM email
-
-    def testSupervisorEmailUsers(self):
-        # John has a supervisor account
-        # John logs in
-        self.cmd.callCommand("login john super")
-        # Assume there are a set of users with email addresses
-        # John sends an email notification
-        ret = self.cmd.callCommand("sendNotification users 'This is a test message'")
-        self.assertEqual(ret, "Email successfully sent to users")
-
-
-class TestSupervisorViewCourse(BaseCase):
-    # AT for PBI:  As a supervisor, I want to see the number of sections per course,
+class TestSupervisorViewSectionsCourse(BaseCase):
+    # AT for PBI 8:  As a supervisor, I want to see the number of sections per course through a webpage,
     # to determine the minimum number of instructors to assign
-
-    # Also AT for PBI:  As a supervisor, I would like to be able to see the number of lab sections,
-    # so that I know the minimum number of TAs required
 
     def tearDown(self):
         # Remove the created course
         self.cmd.callCommand("deleteCourse 01361")
 
-    def testSupervisorViewCourse(self):
+    def testSupervisorViewSectionsCourse(self):
         # John has a supervisor account
         # John logs in
         self.cmd.callCommand("login john super")
@@ -182,37 +164,28 @@ class TestSupervisorViewCourse(BaseCase):
         self.assertIn("Introduction to Software Engineering", ret)
 
 
-@skip("Save for a future Sprint")
-class TestSupervisorViewInstructorAssignments(BaseCase):
-    # AT for PBI:  As a supervisor, I want to be able to see the previous courses an instructor has taught,
-    # so that I may determine which courses should be assigned to them
-
-    # Also AT for PBI:  As a supervisor, I want to be able to see the teaching schedule of an instructor,
-    # so that I may avoid assigning them to multiple sections
+class TestSupervisorViewLabsCourse(BaseCase):
+    # Also AT for PBI 9:  As a supervisor, I would like to be able to see the number of lab sections
+    # through a webpage, so that I know the minimum number of TAs required
 
     def tearDown(self):
-        # Delete the course and instructor created
+        # Remove the created course
         self.cmd.callCommand("deleteCourse 01361")
-        self.cmd.callCommand("deleteAccount tim")
 
-    def testSupervisorViewInstructorAssignments(self):
+    def testSupervisorViewLabsCourse(self):
         # John has a supervisor account
         # John logs in
         self.cmd.callCommand("login john super")
-        # Create a course
-        self.cmd.callCommand("createCourse 01361 'Introduction to Software Engineering' 1 3")
-        # Create an instructor
-        self.cmd.callCommand("createAccount tim default 0010")
-        # Assign a course to an instructor
-        self.cmd.callCommand("assignInstructor tim 01361")
-        # John views the courses assigned to an instructor which exists
-        ret = self.cmd.callCommand("viewAssignmentInstructor tim")
+        # Create a course which will be viewed
+        self.cmd.callCommand("createCourse 01361 1 3 Introduction to Software Engineering")
+        # John views a course which exists
+        ret = self.cmd.callCommand("viewCourse 01361")
         self.assertIn("Introduction to Software Engineering", ret)
 
 
 @skip("Wait for this to be implemented")
 class TestSupervisorAssignTAtoCourse(BaseCase):
-    # AT for PBI:  As a supervisor, I would like to be able to assign TAs to courses,
+    # AT for PBI 10:  As a supervisor, I would like to be able to assign TAs to courses through a webpage,
     # so that each course would have sufficient number of TAs
 
     def tearDown(self):
@@ -238,8 +211,8 @@ class TestSupervisorAssignTAtoCourse(BaseCase):
 
 @skip("Wait for this to be implemented")
 class TestSupervisorAssignTAtoLab(BaseCase):
-    # AT for PBI:  As a supervisor, I would like to be able to assign TAs to specific lab sections,
-    # so that TAs can work around their schedule
+    # AT for PBI 11:  As a supervisor, I would like to be able to assign TAs to specific lab sections
+    # through a webpage, so that TAs can work around their schedule
 
     def tearDown(self):
         # Delete the course and TA created
@@ -255,7 +228,7 @@ class TestSupervisorAssignTAtoLab(BaseCase):
         # Create a TA
         self.cmd.callCommand("createAccount ian pass123 0001")
         # John assigns a TA to a course
-        ret = self.cmd.callCommand("assignTA ian 01361")
+        self.cmd.callCommand("assignTA ian 01361")
         # John assigns a TA to a lab section
         ret = self.cmd.callCommand("assignTAtoLab ian 01361101")
         self.assertIn("ian successfully assigned", ret)
@@ -266,7 +239,7 @@ class TestSupervisorAssignTAtoLab(BaseCase):
 
 @skip("Wait for this to be implemented")
 class TestSupervisorAssignInstructortoCourse(BaseCase):
-    # AT for PBI:  As a supervisor, I want to assign an instructor to a course
+    # AT for PBI 12:  As a supervisor, I want to assign an instructor to a course through a webpage
 
     def tearDown(self):
         # Delete the course and instructor created
@@ -290,7 +263,7 @@ class TestSupervisorAssignInstructortoCourse(BaseCase):
 
 
 class TestAdministratorCreateCourse(BaseCase):
-    # AT for PBI:  As an administrator, I want to create a course
+    # AT for PBI 13:  As an administrator, I want to create a course through a webpage
 
     def tearDown(self):
         # Remove the created course
@@ -309,14 +282,14 @@ class TestAdministratorCreateCourse(BaseCase):
 
 
 class TestAdministratorDeleteCourse(BaseCase):
-    # AT for PBI:  As an administrator, I want to delete a course
+    # AT for PBI 14:  As an administrator, I want to delete a course through a webpage
 
     def testAdministratorDeleteCourse(self):
         # Rick has an administrator account
         # John logs in
         self.cmd.callCommand("login rick admin")
         # Rick creates a course which will be deleted
-        ret = self.cmd.callCommand("createCourse 01361 1 3 Introduction to Software Engineering")
+        self.cmd.callCommand("createCourse 01361 1 3 Introduction to Software Engineering")
         # Rick deletes the course
         ret = self.cmd.callCommand("deleteCourse 01361")
         self.assertEqual(ret, "Course 01361 successfully removed.")
@@ -326,7 +299,7 @@ class TestAdministratorDeleteCourse(BaseCase):
 
 
 class TestAdministratorCreateAccount(BaseCase):
-    # AT for PBI:  As an administrator, I want to create an account
+    # AT for PBI 15:  As an administrator, I want to create an account through a webpage
 
     def tearDown(self):
         # Remove the created account
@@ -346,7 +319,7 @@ class TestAdministratorCreateAccount(BaseCase):
 
 
 class TestAdministratorDeleteAccount(BaseCase):
-    # AT for PBI:  As an administrator, I want to delete an account
+    # AT for PBI 16:  As an administrator, I want to delete an account through a webpage
 
     def testAdministratorDeleteAccount(self):
         # Rick has an administrator account
@@ -365,7 +338,7 @@ class TestAdministratorDeleteAccount(BaseCase):
 
 @skip("Save for a future Sprint")
 class TestAdministratorEditAccount(BaseCase):
-    # AT for PBI:  As an administrator, I want to edit an account
+    # AT for PBI 17:  As an administrator, I want to edit an account through a webpage
 
     def tearDown(self):
         # Remove the created and modified account
@@ -388,25 +361,11 @@ class TestAdministratorEditAccount(BaseCase):
 
 
 @skip("Save for a future Sprint")
-class TestAdministratorEmailUsers(BaseCase):
-    # AT for PBI:  As an administrator, I want to send out notifications to users via UWM email
-
-    def testAdministratorEmailUsers(self):
-        # Rick has an administrator account
-        # Rick logs in
-        self.cmd.callCommand("login rick admin")
-        # Assume there are a set of users with email addresses
-        # Rick sends an email notification
-        ret = self.cmd.callCommand("sendNotification users 'This is a test message'")
-        self.assertEqual(ret, "Email successfully sent to users")
-
-
-@skip("Save for a future Sprint")
 class TestInstructorViewTA(BaseCase):
-    # AT for PBI: As an instructor, I want to view the TA's assigned to my courses
+    # AT for PBI 18: As an instructor, I want to view the TAs assigned to my courses through a webpage
 
     def testInstructorViewTA(self):
-        # Asssume Bill is an Instructor
+        # Assume Bill is an Instructor
         # Bill logs in
         self.cmd.callCommand("login bill instructor")
 
@@ -421,72 +380,59 @@ class TestInstructorViewTA(BaseCase):
 
 @skip("Save for a future Sprint")
 class TestInstructorEditPersonalInfo(BaseCase):
-    # At for PBI: As an Instructor, I want to edit my personal contact information
+    # At for PBI 19: As an Instructor, I want to edit my personal contact information through a webpage
 
     def testInstructorEditPersonalInfo(self):
-        #Assume Bill is an Instructor
-        #Bill logs in
+        # Assume Bill is an Instructor
+        # Bill logs in
         self.cmd.callCommand("login bill instructor")
 
         ret = self.cmd.callCommand("editAccount bill")
         self.assertEqual("Account bill successfully modified", ret)
         ret = self.cmd.callCommand("viewAccount bill")
-        #Assuming bill changed his phone number to (414)555-5555
+        # Assuming bill changed his phone number to (414)555-5555
         self.assertIn("(414)555-5555", ret)
 
 
 @skip("Save for a future Sprint")
 class TestInstructorViewAssignmentInstructor(BaseCase):
-    # AT for PBI: As an instuctor, I want to view the courses I am assigned to
+    # AT for PBI 20: As an instructor, I want to view the courses I am assigned to through a webpage
 
     def testInstructorViewAssignmentInstructor(self):
-        #assume Bill is an Instructor
-        #Bill logs in
+        # Assume Bill is an Instructor
+        # Bill logs in
         self.cmd.callCommand("login bill instructor")
 
-        #Assume bill is already assigned to class 01361
+        # Assume bill is already assigned to class 01361
         ret = self.cmd.callCommand("viewAssignmentInstructor bill")
         self.assertIn("Introduction to Software Engineering", ret)
 
 
-@skip("Save for a future Sprint")
-class TestInstructorSendEmail(BaseCase):
-    # AT for PBI: As an instructor, I want to be able to send out notifications to my TAs via UWM email
-
-    def testInstructorSendEmail(self):
-        #assume Bill is an Instructor
-        self.cmd.callCommand("login bill instructor")
-
-        #assume Bill is already assigned to course 01361
-        ret = self.cmd.callCommand("sendNotificationTA 01361 'This is a test message'")
-        self.assertEqual(ret, "Email successfully sent to TAs of Intro to Software Engineering.")
-
-
 @skip("Wait for this to be implemented")
 class TestInstructorAssignTAtoLab(BaseCase):
-    # AT for PBI: As an Instructor, I want to be able to assign my TAS to particular lab sections
+    # AT for PBI 21: As an Instructor, I want to be able to assign my TAS to particular lab sections through a webpage
 
     def testInstructorAssignTAtoLab(self):
-        #assume Bill is an Instructor
+        # Assume Bill is an Instructor
         self.cmd.callCommand("login bill instructor")
 
-        #assume Bill is already assigned to course 01361
-        #assume TA Bob is assigned to course 01361
+        # Assume Bill is already assigned to course 01361
+        # Assume TA Bob is assigned to course 01361
         ret = self.cmd.callCommand("assignTA bob 01361 01")
         self.assertEqual(ret, "bob successfully assigned")
         ret = self.cmd.callCommand("viewCourse 01361")
         self.assertIn("01 - bob", ret)
 
 
-
 class TestInstructorViewPublicInfo(BaseCase):
-    # AT for PBI: As an instructor, I want to be able to read public contact information of all users
+    # AT for PBI 22: As an instructor, I want to be able to read public contact information
+    # of all users through a webpage
 
     def testInstructorViewPublicInfo(self):
-        #Asssume Bill is an Instructor
+        # Assume Bill is an Instructor
         self.cmd.callCommand("login bill instructor")
 
-        #Assume TA ian and Supervisor john exists
+        # Assume TA ian and Supervisor john exists
         ret = self.cmd.callCommand("viewAccount ian")
         self.assertIn("ian", ret)
         ret = self.cmd.callCommand("viewAccount john")
@@ -495,39 +441,57 @@ class TestInstructorViewPublicInfo(BaseCase):
 
 @skip("Save for a future Sprint")
 class TestTAEditPersonalInfo(BaseCase):
-    # AT for PBI: As a TA, I want to be able to edit my own contact information
+    # AT for PBI 23: As a TA, I want to be able to edit my own contact information through a webpage
 
     def testTAEditPersonalInfo(self):
-        #Assume ian is a TA
+        # Assume ian is a TA
         self.cmd.callCommand("login ian TA")
 
         ret = self.cmd.callCommand("editAccount ian")
         self.assertEqual(ret, "Account ian successfully modified")
         ret = self.cmd.callCommand("viewAccount ian")
-        #Assume ian changed his phone number to (414)555-5555
+        # Assume ian changed his phone number to (414)555-5555
         self.assertIn("(414)555-5555", ret)
 
 
 @skip("Save for a future Sprint")
 class TestTAViewAssignments(BaseCase):
-    # AT for PBI: As a TA, I want to be able to view TA assignments
+    # AT for PBI 24: As a TA, I want to be able to view TA assignments through a webpage
 
     def testTAViewAssignments(self):
-        #Assume ian is a TA
+        # Assume ian is a TA
         self.cmd.callCommand("login ian TA")
 
-        #Assume ian is assigned to course 01361 lab 01
+        # Assume ian is assigned to course 01361 lab 01
         ret = self.cmd.callCommand("viewAssignmentTA ian")
         self.assertIn("Introduction to Software Engineering", ret)
 
 
 class TestTAViewPublicInfo(BaseCase):
-    # AT for PBI: As a TA, I want to be able to read the public contact information of all users
+    # AT for PBI 25: As a TA, I want to be able to read the public contact information of all users
+    # through a webpage
 
     def testTAViewPublicInfo(self):
-        #Assume bob is a TA
+        # Assume bob is a TA
         self.cmd.callCommand("login ian TA")
 
-        #Assume instructor bill exists
+        # Assume instructor bill exists
         ret = self.cmd.callCommand("viewAccount bill")
         self.assertIn("bill", ret)
+
+
+@skip("Need to implement")
+class TestAccessWebsite(BaseCase):
+    # AT for PBI 26: As a visitor, I can access the homepage
+
+    def testAccessWebsite(self):
+        pass
+
+
+@skip("Need to implement")
+class TestUserLogin(BaseCase):
+    # AT for PBI 27: As a user, I can login through the webpage
+
+    def testUserLogin(self):
+        pass
+
