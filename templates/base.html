@@ -1,29 +1,27 @@
-{% load static %}
+{% load staticfiles %}
         <!DOCTYPE html>
 
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <title>Team 404 Project</title>
     <meta charset="UTF-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1"/>
-    <link rel="stylesheet" href="{% static "static/css/style.css" %}">
+    <link rel="stylesheet" href="{% static "css/style.css" %} ">
 </head>
 
-<header>
-    <div class="container">
-        <nav>
-            <ul>
-                <li><a href="#">Home</a></li>
-                <li><a href="#">Modify</a></li>
-                <li><a href="#">View</a></li>
-                <li><a href="#">Login</a></li>
-
-            </ul>
-         </nav>
-    </div>
-</header>
 <body>
-    {% block navbar %}
-    {% endblock navbar %}
+    <nav>
+        <ul>
+            <li><a href="{% url "home.html" %}">Home</a></li>
+            <li><a href="{% url "modify.html" %}">Modify</a></li>
+            <li><a href="{% url "view.html" %}">View</a></li>
+            <li><a href="#">Login</a></li>
+
+         </ul>
+    </nav>
+    {% block content %}
+
+    {% endblock content %}
 </body>
 </html>
