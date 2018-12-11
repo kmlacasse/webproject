@@ -1,0 +1,47 @@
+ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    border: 2px solid #555555;
+    background-color: black;
+
+}
+
+li {
+    display: inline;
+    border-right: none;
+    font-size: 24px;
+    padding: 30px;
+}
+
+li a {
+    color: white;
+}
+
+li a:hover {
+
+}
+
+li a:active {
+    background-color: darkgray;
+}
+
+p1 {
+    display: inline;
+    color: green;
+}
+/* Used in home page */
+#signUpButton {
+    display: inline;
+}
+
+.formText {
+    padding-left: 20px;
+    color: black;
+}
+
+.fields {
+    line-height: 25px;
+
+}
+

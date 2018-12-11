@@ -4,12 +4,25 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Hello Django</title>
+    <title>Team 404 Project</title>
     <meta charset="UTF-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1"/>
-    <link rel="stylesheet" href="{% static "css/style.css" %}">
+    <link rel="stylesheet" href="{% static "css/style.css" %} ">
 </head>
+
 <body>
-    {% block content %}{% endblock content %}
+    <nav>
+        <ul>
+            <li><a href="{% url "home.html" %}">Home</a></li>
+            <li><a href="{% url "modify.html" %}">Modify</a></li>
+            <li><a href="{% url "view.html" %}">View</a></li>
+            <li><a href="#">Login</a></li>
+
+            <li><a href="{% url "create_course.html" %}">Create Course</a></li>
+         </ul>
+    </nav>
+    {% block content %}
+
+    {% endblock content %}
 </body>
 </html>

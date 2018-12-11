@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% block content %}
+    <p2>Create a New Course</p2>
+    <form>
+        <div class="fields">
+            <p class="formText"> Course #: </p><input type="text" name="courseNum"><br>
+            <p class="formText"> Course Name: </p><input type="text" name="courseName"><br>
+            <p class="formText"> Course Subject: </p> <select>
+                            <option value="01">Computer Science</option>
+                            <option value="02">Electrical Engineering</option>
+                            <option value="03">Math</option>
+                            <option value="04">Biology</option>
+                            <option value="05">Chemistry</option>
+                          </select><br>
+            <p class="formText"> # of Lectures: </p> <select>
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                            <option value="4">4</option>
+                            <option value="5">5</option>
+                            <option value="6">6</option>
+                            <option value="7">7</option>
+                            <option value="8">8</option>
+                            <option value="9">9</option>
+                          </select><br>
+            <p class="formText"> # of Labs: </p> <select>
+                            <option value="0">0</option>
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                            <option value="4">4</option>
+                            <option value="5">5</option>
+                            <option value="6">6</option>
+                            <option value="7">7</option>
+                            <option value="8">8</option>
+                            <option value="9">9</option>
+                      </select><br>
+        </div>
+    </form>
+
+
+
+{%  endblock content %}
