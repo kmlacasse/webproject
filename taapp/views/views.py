@@ -23,3 +23,25 @@ class Modify(View):
         cmd.text = request.POST["command"]
         s = cmd.callCommand(request.POST["command"])
         return render(request, "taapp/modify.html", {"list":s})
+
+
+class View(View):
+    def get(self, request):
+        return render(request, "taapp/view.html")
+
+    def post(self,request):
+        cmd = setup.setupCommands()
+        cmd.text = request.POST["command"]
+        s = cmd.callCommand(request.POST["command"])
+        return render(request, "taapp/view.html", {"list":s})
+
+
+class CreateCourse(View):
+    def get(self, request):
+        return render(request, "taapp/create_course.html")
+
+    def post(self,request):
+        cmd = setup.setupCommands()
+        cmd.text = request.POST["command"]
+        s = cmd.callCommand(request.POST["command"])
+        return render(request, "taapp/create_course.html", {"list":s})
