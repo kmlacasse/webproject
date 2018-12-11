@@ -45,3 +45,13 @@ class CreateCourse(View):
         cmd.text = request.POST["command"]
         s = cmd.callCommand(request.POST["command"])
         return render(request, "taapp/create_course.html", {"list":s})
+
+class DeleteCourse(View):
+    def get(self, request):
+        return render(request, "taapp/delete_course.html")
+
+    def post(self, request):
+        cmd = setup.setupCommands()
+        cmd.text = request.POST["command"]
+        s = cmd.callCommand(request.POST["command"])
+        return render(request, "taapp/delete_course.html", {"list":s})
