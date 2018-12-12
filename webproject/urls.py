@@ -25,5 +25,16 @@ urlpatterns = [
     path(r'modify.html', Modify.as_view()),
     path(r'view.html', View.as_view()),
     path(r'create_course.html', CreateCourse.as_view()),
+    path(r'delete_course.html', DeleteCourse.as_view()),
+    path(r'create_account.html', CreateAccount.as_view()),
+    path(r'edit_account.html', EditAccount.as_view()),
+    path(r'delete_account.html', DeleteAccount.as_view()),
+    path(r'assign_instructor.html', AssignInstructor.as_view()),
+    path(r'assign_TA.html', AssignTA.as_view()),
+    path(r'assign_TA_to_lab.html', AssignTAtoLab.as_view()),
+    path(r'view_course.html', ViewCourse.as_view()),
+    path(r'view_lecture.html', ViewLecture.as_view()),
+    path(r'view_lab.html', ViewLab.as_view()),
+    path(r'view_account.html', ViewAccount.as_view()),
 
 ]

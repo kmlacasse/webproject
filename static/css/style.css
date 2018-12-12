@@ -1,38 +1,90 @@
-ul {
-    list-style-type: none;
-    margin: 0;
-    padding: 0;
-    border: 2px solid #555555;
-    background-color: black;
-
+body {
+    padding-left: 45px;
+    padding-right: 45px;
 }
 
-li {
+
+.navBar {
+    box-sizing: border-box;
+    margin: 0px;
+    padding: 10px;
+    border: 2px solid black;
+    background-color: lightgrey;
+}
+.navBar::after {
+    content: "";
+    clear: both;
+    display: block;
+}
+.navBarLink {
+    float: left;
+    width: 18%;
+    font-size: 24pt;
     display: inline;
-    border-right: none;
-    font-size: 24px;
-    padding: 30px;
-}
-
-li a {
+    padding-left: 25px;
+    padding-right: 25px;
+    text-align: center;
     color: white;
 }
-
-li a:hover {
-
+.navBarLink a {
+    text-decoration: none;
+    color: black;
 }
-
-li a:active {
+.navBarLink:hover {
+    background-color: lightskyblue;
+}
+.navBarLink:active {
     background-color: darkgray;
 }
 
-p1 {
+.textInput {
+    font-size: 12pt;
+}
+
+.homeWelcome {
     display: inline;
     color: green;
 }
 /* Used in home page */
-#signUpButton {
+.signUpButton {
     display: inline;
+}
+
+.modifyButton {
+    line-height: 2;
+    border: 2px solid black;
+    cursor: pointer;
+    font-size: 24pt;
+    text-decoration: none;
+    text-align: center;
+    background-color: #818bff;
+    padding: 8px 16px;
+}
+.modifyButton a {
+    text-decoration: none;
+    color: black;
+}
+.modifyButton:hover {
+    background-color: aquamarine;
+}
+
+.viewButton {
+    line-height: 2;
+    color: black;
+    border: 2px solid black;
+    cursor: pointer;
+    font-size: 24pt;
+    text-decoration: none;
+    text-align: center;
+    background-color: #818bff;
+    padding: 8px 16px;
+}
+.viewButton a {
+    text-decoration: none;
+    color: black;
+}
+.viewButton:hover{
+    background-color: aquamarine;
 }
 
 .formText {
@@ -41,7 +93,24 @@ p1 {
 }
 
 .fields {
-    line-height: 25px;
+    line-height: 20px;
+}
 
+.createCourseFields {
+    padding-left: 30px;
+    font-size: 24pt;
+    line-height: 0px;
+}
+.createCourseSelect {
+    font-size: 12pt;
+    padding: 3px
+}
+.submitModifyButton {
+    background-color: indianred;
+    border: 2px solid black;
+    color: white;
+    padding: 8px 16px;
+    cursor: pointer;
+    font-size: 24px;
 }
 
