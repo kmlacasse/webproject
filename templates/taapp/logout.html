@@ -2,10 +2,12 @@
 {% block content %}
 <p class="modifyButtonTitle">Logout</p>
 
-  <form action="logout.html" method="post">
+    <form action="logout.html" method="post">
         {% csrf_token %}
         If you want to logout, click Submit:
         <input type="submit" class="submitModifyButton" value="Submit">
     </form>
+
+    {{ list }}
 
 {% endblock content %}
