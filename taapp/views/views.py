@@ -114,22 +114,31 @@ class DeleteAccount(View):
 
 class AssignInstructor(View):
     def get(self, request):
-        return render(request, "taapp/assign_instructor.html")
+        return render(request, "taapp/assign_instructor.html", {"list":''})
     def post(self, request):
-        pass
+        cmd = setup.setupCommands()
+        cmd.text = "assignInstructor " + request.POST["username"] + " " + request.POST["courseID"] + request.POST["lecture"]
+        s = cmd.callCommand(cmd.text)
+        return render(request, "taapp/assign_instructor.html", {"list": s})
 
 class AssignTA(View):
     def get(self, request):
-        return render(request, "taapp/assign_TA.html")
+        return render(request, "taapp/assign_TA.html", {"list": ''})
     def post(self, request):
-        pass
+        cmd = setup.setupCommands()
+        cmd.text = "assignTA " + request.POST["username"] + " " + request.POST["courseID"]
+        s = cmd.callCommand(cmd.text)
+        return render(request, "taapp/assign_TA.html", {"list": s})
 
 
 class AssignTAtoLab(View):
     def get(self, request):
-        return render(request, "taapp/assign_TA_to_lab.html")
+        return render(request, "taapp/assign_TA_to_lab.html", {"list": ''})
     def post(self, request):
-        pass
+        cmd = setup.setupCommands()
+        cmd.text = "assignTAtoLab " + request.POST["username"] + " " + request.POST["courseID"] + request.POST["lab"]
+        s = cmd.callCommand(cmd.text)
+        return render(request, "taapp/assign_TA_to_lab.html", {"list": s})
 
 
 class ViewCourse(View):
@@ -180,3 +189,23 @@ class ViewAccount(View):
             # If not logged in, redirect to login screen with error message
             s = "You must login to view account website"
             return render(request, "taapp/login.html", {"list": s})
+
+          
+class ViewInstructorAssignments(View):
+    def get(self, request):
+        return render(request, "taapp/view_instructor_assignments.html", {"list": ''})
+    def post(self, request):
+        cmd = setup.setupCommands()
+        cmd.text = "viewAccount " + request.POST["username"]
+        s = cmd.callCommand(cmd.text)
+        return render(request, "taapp/view_instructor_assignments.html", {"list": s})
+
+class ViewTAAssignments(View):
+    def get(self, request):
+        return render(request, "taapp/view_TA_assignments.html", {"list": ''})
+    def post(self, request):
+        cmd = setup.setupCommands()
+        cmd.text = "viewAccount " + request.POST["username"]
+        s = cmd.callCommand(cmd.text)
+        return render(request, "taapp/view_TA_assignments.html", {"list": s})
+      
