@@ -120,6 +120,10 @@ class ViewLab(View):
 
 class ViewAccount(View):
     def get(self, request):
-        return render(request, "taapp/view_account.html")
+        return render(request, "taapp/view_account.html", {"list": []})
     def post(self, request):
-        pass
+        user = request.POST["name"]
+        cmd = setup.setupCommands()
+        cmd.text = "viewAccount " + user
+        s = cmd.callCommand(cmd.text)
+        return render(request, "taapp/view_account.html", {"list": s})

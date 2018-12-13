@@ -20,7 +20,6 @@ from taapp.views.views import *
 
 urlpatterns = [
     url(r'admin/', admin.site.urls),
-    path('', Home.as_view()),
     path(r'home.html', Home.as_view()),
     path(r'modify.html', Modify.as_view()),
     path(r'view.html', View.as_view()),
@@ -36,5 +35,6 @@ urlpatterns = [
     path(r'view_lecture.html', ViewLecture.as_view()),
     path(r'view_lab.html', ViewLab.as_view()),
     path(r'view_account.html', ViewAccount.as_view()),
+    path('', Home.as_view()),
 
 ]
