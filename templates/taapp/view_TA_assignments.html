@@ -1,16 +1,14 @@
 {% extends "base.html" %}
-
 {% block content %}
-<p class="modifyButtonTitle">Assign a TA to a Course</p>
-    <form action="assign_TA.html" method="post"> {%  csrf_token %}
-        <div class="assignTAFields">
+    <p class="modifyButtonTitle">View TA Assignments</p>
+    <form action="view_TA_assignments.html" method="post"> {%  csrf_token %}
+        <div class="viewTAassignmentsFields">
             <p class="formText"> TA Username: <input type="text" name="username" class="textInput"></p><br>
-            <p class="formText"> Course #: <input type="text" name="courseID" class="textInput"></p><br>
         </div>
         <input type="submit" class="submitModifyButton" value="Submit">
     </form>
 
     <p>
-        {{list}}
+    {{ list }}
     </p>
 {% endblock content %}

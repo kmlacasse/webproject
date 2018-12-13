@@ -2,5 +2,28 @@
 
 {% block content %}
 <p class="modifyButtonTitle">Assign an Instructor</p>
+    <form action="assign_instructor.html" method="post"> {% csrf_token %}
+        <div class="assignInstructorFields">
+            <p class="formText"> Instructor Username: <input type="text" name="username" class="textInput"></p><br>
+            <p class="formText"> Course #: <input type="text" name="courseID" class="textInput"></p><br>
+            <p class="formText"> Lecture #:
+                <select class="assignInstructorSelect" name="lecture">
+                    <option value="1">Lecture 1</option>
+                    <option value="2">Lecture 2</option>
+                    <option value="3">Lecture 3</option>
+                    <option value="4">Lecture 4</option>
+                    <option value="5">Lecture 5</option>
+                    <option value="6">Lecture 6</option>
+                    <option value="7">Lecture 7</option>
+                    <option value="8">Lecture 8</option>
+                    <option value="9">Lecture 9</option>
+                </select></p><br>
+        </div>
+        <input type="submit" class="submitModifyButton" value="Submit">
+    </form><br>
+
+    <p>
+        {{list}}
+    </p>
 
 {% endblock content %}
