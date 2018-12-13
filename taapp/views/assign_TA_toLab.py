@@ -34,6 +34,14 @@ class AssignTAtoLab(CmdInterface):
             return "Failed. Username is not a TA."
 
         s = (command_items[2])[:-3]
+        if(userPermissions[2] == '1'):
+            instructList = list(CourseMember.objects.filter(account__username=setup.current_user.username))
+            bool = False
+            for i in instructList:
+                if(i.course.courseID == s):
+                    bool = True
+            if (bool == False):
+                return "Failed. TA is not assigned to the same course as Instructor."
 
         courseList = list(CourseMember.objects.filter(account__username=TA.username))
         for i in courseList:
