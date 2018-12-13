@@ -163,7 +163,8 @@ class ViewAccount(View):
         else:
             # Redirect to login screen with error message
             s = "You must login to view account website"
-            return render(request, "taapp/login.html", {"list": s})
+            context = {"user": None, "list": s}
+            return render(request, "taapp/login.html", context)
 
     def post(self, request):
         # Only process if someone is logged in
@@ -179,4 +180,5 @@ class ViewAccount(View):
         else:
             # If not logged in, redirect to login screen with error message
             s = "You must login to view account website"
-            return render(request, "taapp/login.html", {"list": s})
+            context = {"user":None, "list":s}
+            return render(request, "taapp/login.html", context)
