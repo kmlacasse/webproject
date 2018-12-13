@@ -25,7 +25,6 @@ from .edit_account import EditEmail
 # Use a global user variable to track who is logged in
 current_user = None
 
-
 def setupCommands():
     # Instantiate the command class and add all commands to it
     cmd = Command()
