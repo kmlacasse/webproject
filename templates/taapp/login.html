@@ -1,5 +1,15 @@
-{% extends base.html %}
+{% extends "base.html" %}
 {% block content %}
+<p class="modifyButtonTitle">Login</p>
 
+  <form action="login.html" method="post">
+        {% csrf_token %}
+        <p class="formText"> Username: <input type="text" class="textInput" name="username"></p><br>
+        <p class="passwordField"> Password: <input type="password" class="textInput" name="password"></p><br>
+
+        <input type="submit" class="submitModifyButton" value="Submit">
+    </form>
+
+    {{ list }}
 
 {% endblock content %}
