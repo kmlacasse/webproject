@@ -22,7 +22,7 @@ class AssignTAtoLab(CmdInterface):
             return "Failed. No user currently logged in."
 
         userPermissions = setup.current_user.permissions
-        if userPermissions[0] != '1' and userPermissions[1] != '1':
+        if userPermissions[0] != '1' and userPermissions[1] != '1' and userPermissions[2] != '1':
             return "Failed. Restricted action."
 
         file = FileIO()

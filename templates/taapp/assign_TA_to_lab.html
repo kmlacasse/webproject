@@ -2,5 +2,27 @@
 
 {% block content %}
 <p class="modifyButtonTitle">Assign TA to Lab</p>
+    <form action="assign_TA_to_lab.html" method="post"> {%  csrf_token %}
+        <div class="assignTAtoLabFields">
+            <p class="formText"> TA Username: <input type="text" name="username" class="textInput"></p><br>
+            <p class="formText"> Course #: <input type="text" name="courseID" class="textInput"></p><br>
+            <p class="formText"> Lab #:
+                <select class="assignInstructorSelect" name="lab">
+                    <option value="101">Lab 1</option>
+                    <option value="102">Lab 2</option>
+                    <option value="103">Lab 3</option>
+                    <option value="104">Lab 4</option>
+                    <option value="105">Lab 5</option>
+                    <option value="106">Lab 6</option>
+                    <option value="107">Lab 7</option>
+                    <option value="108">Lab 8</option>
+                    <option value="109">Lab 9</option>
+                </select></p><br>
+        </div>
+        <input type="submit" class="submitModifyButton" value="Submit">
+    </form><br>
 
+    <p>
+        {{list}}
+    </p>
 {% endblock content %}
