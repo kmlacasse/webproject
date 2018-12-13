@@ -15,10 +15,10 @@
         <li class="navBarLink"><a href="home.html">Home</a></li>
         <li class="navBarLink"><a href="modify.html">Modify</a></li>
         <li class="navBarLink"><a href="view.html">View</a></li>
-        {% if user %}
-            <li class="navBarLink"><a href="logout.html">Logout</a></li>
-        {% else %}
+        {% if user == None %}
             <li class="navBarLink"><a href="login.html">Login</a></li>
+        {% else %}
+            <li class="navBarLink"><a href="logout.html">Logout</a></li>
         {% endif %}
     </ul>
     {% block content %}

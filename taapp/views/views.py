@@ -52,7 +52,8 @@ class Login(View):
         if s == username + " logged in":
             print("Saving session")
             request.session["name"] = username
-        return render(request, "taapp/login.html", {"list": s})
+        context = {"user":username, "list":s}
+        return render(request, "taapp/login.html", context)
 
 
 class Logout(View):
@@ -65,7 +66,7 @@ class Logout(View):
         cmd.text = "logout"
         s = cmd.callCommand(cmd.text)
         context = {"user":None,"list":s}
-        return render(request, "taapp/logout.html", {"list": s})
+        return render(request, "taapp/logout.html", context)
 
 
 class CreateCourse(View):
