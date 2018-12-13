@@ -36,7 +36,7 @@ class ViewInstructorAssignments(CmdInterface):
         retString = ""
         for i in sectionList:
             section = file.readData(i.section.sectionID, 'Section')
-            retString += (section.sectionName + '\n')
+            retString += (section.sectionID + "-" + section.sectionName + '\n')
 
         return retString
 

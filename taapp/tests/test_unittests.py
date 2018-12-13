@@ -669,3 +669,116 @@ class TestDeleteCourse(BaseCase):
 
         #LOGGING OUT
         self.cmd.callCommand("logout")
+
+class TestViewInstructorAssignments(BaseCase):
+
+    # Unit Tests for viewInstructorAssignments command
+
+    def testViewInstructorAssignmentsSuccessAndDup(self):
+        #login super
+        self.cmd.callCommand("login john super")
+
+        #assign bill to lecture 013611
+        self.cmd.callCommand("assignInstructor bill 013611")
+
+        #view bill's assignments
+        ret = self.cmd.callCommand("viewInstructorAssignments bill")
+        self.assertEquals(ret, "013611")
+
+        #logout
+        self.cmd.callCommand("logout")
+
+        #login bill
+        self.cmd.callCommand("login bill instructor")
+
+        #view bill's assignments as bill
+        ret = self.cmd.callCommand("viewInstructorAssignments bill")
+        self.assertEquals(ret, "013611")
+
+    def testViewInstructorAssignmentsInvalid(self):
+        #no user logged in
+        ret = self.cmd.callCommand("viewInstructorAssignments bill")
+        self.assertEqual(ret, "Failed. No user currently logged in.")
+
+        #login super
+        self.cmd.callCommand("login john super")
+
+        #invalid parameters
+        ret = self.cmd.callCommand("viewInstructorAssignments ")
+        self.assertEqual(ret, "Failed. Invalid parameters.")
+
+        #No such user
+        ret = self.cmd.callCommand("viewInstructorAssignments xyz")
+        self.assertEqual(ret, "Failed. No such username.")
+
+        #username is not an instructor
+        ret = self.cmd.callCommand("viewInstructorAssignments rick")
+        self.assertEqual(ret, "Failed. Username is not an instructor.")
+
+        #logout super
+        self.cmd.callCommand("logout")
+
+        #login non super and not bill
+        self.cmd.callCommand("login ian TA")
+
+        #attempt to assigninstructor
+        ret = self.cmd.callCommand("viewInstructorAssignments bill")
+        self.assertEqual(ret, "Failed. Restricted action.")
+
+class TestViewTAAssignments(BaseCase):
+
+    # Unit Tests for viewTAAssignments command
+
+    def testViewTAAssignmentsSuccessAndDup(self):
+        #login super
+        self.cmd.callCommand("login john super")
+
+        #assign ian to course 01361
+        self.cmd.callCommand("assignTA ian 01361")
+
+        #assign ian to lab 01361101
+        self.cmd.callCommand("assignTAtoLab ian 01361101")
+
+        #view ian's assignments
+        ret = self.cmd.callCommand("viewTAAssignments ian")
+        self.assertEquals(ret, "01361101")
+
+        #logout
+        self.cmd.callCommand("logout")
+
+        #login ian
+        self.cmd.callCommand("login ian TA")
+
+        #view ian's assignments as ian
+        ret = self.cmd.callCommand("viewTAAssignments ian")
+        self.assertEquals(ret, "01361101")
+
+    def testViewTAAssignmentsInvalid(self):
+        #no user logged in
+        ret = self.cmd.callCommand("viewTAAssignments ian")
+        self.assertEqual(ret, "Failed. No user currently logged in.")
+
+        #login super
+        self.cmd.callCommand("login john super")
+
+        #invalid parameters
+        ret = self.cmd.callCommand("viewTAAssignments ")
+        self.assertEqual(ret, "Failed. Invalid parameters.")
+
+        #No such user
+        ret = self.cmd.callCommand("viewTAAssignments xyz")
+        self.assertEqual(ret, "Failed. No such username.")
+
+        #username is not an instructor
+        ret = self.cmd.callCommand("viewTAAssignments bill")
+        self.assertEqual(ret, "Failed. Username is not a TA.")
+
+        #logout super
+        self.cmd.callCommand("logout")
+
+        #login non super and not ian
+        self.cmd.callCommand("login bill instructor")
+
+        #attempt to assigninstructor
+        ret = self.cmd.callCommand("viewTAAssignments ian")
+        self.assertEqual(ret, "Failed. Restricted action.")

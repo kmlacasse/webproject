@@ -10,6 +10,8 @@ from .view_users import ViewUsers
 from .view_course import ViewCourse
 from .view_lecture import ViewLecture
 from .view_lab import ViewLab
+from .view_Instructor_assignments import ViewInstructorAssignments
+from .view_TA_assignments import ViewTAAssignments
 from .assign_instructor import AssignInstructor
 from .assign_TA import AssignTA
 from .assign_TA_toLab import AssignTAtoLab
@@ -18,6 +20,7 @@ from .edit_account import ChangePassword
 from .edit_account import EditAddress
 from .edit_account import EditPhoneNumber
 from .edit_account import EditEmail
+
 
 # Use a global user variable to track who is logged in
 current_user = None
@@ -48,6 +51,10 @@ def setupCommands():
     cmd.addCommand("viewLecture", viewLecture)
     viewLab = ViewLab()
     cmd.addCommand("viewLab", viewLab)
+    viewInstructorAssignments = ViewInstructorAssignments()
+    cmd.addCommand("viewInstructorAssignments", viewInstructorAssignments)
+    viewTAAssignments = ViewTAAssignments()
+    cmd.addCommand("viewTAAssignments", viewTAAssignments)
     assignInstructor = AssignInstructor()
     cmd.addCommand("assignInstructor", assignInstructor)
     assignTA = AssignTA()
