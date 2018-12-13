@@ -1,5 +1,7 @@
 from django.shortcuts import render
 from django.views import View
+
+from taapp.models import Account
 from . import setup
 
 
@@ -46,7 +48,12 @@ class Login(View):
         cmd = setup.setupCommands()
         cmd.text = "login " + username + " " + password
         s = cmd.callCommand(cmd.text)
-        return render(request, "taapp/login.html", {"list": s})
+        # If successful login, set session name
+        if s == username + " logged in":
+            print("Saving session")
+            request.session["name"] = username
+        context = {"user":username, "list":s}
+        return render(request, "taapp/login.html", context)
 
 
 class Logout(View):
@@ -54,7 +61,12 @@ class Logout(View):
         return render(request, "taapp/logout.html")
 
     def post(self, request):
-        pass
+        request.session.pop("name")
+        cmd = setup.setupCommands()
+        cmd.text = "logout"
+        s = cmd.callCommand(cmd.text)
+        context = {"user":None,"list":s}
+        return render(request, "taapp/logout.html", context)
 
 
 class CreateCourse(View):
@@ -152,14 +164,33 @@ class ViewLab(View):
 
 class ViewAccount(View):
     def get(self, request):
-        return render(request, "taapp/view_account.html")
-    def post(self, request):
-        user = request.POST["name"]
-        cmd = setup.setupCommands()
-        cmd.text = "viewAccount " + user
-        s = cmd.callCommand(cmd.text)
-        return render(request, "taapp/view_account.html", {"list": s})
+        # Make sure someone is logged in before showing this page
+        if "name" in request.session:
+            username = request.session["name"]
+            context = {"user": username}
+            return render(request, "taapp/view_account.html", context)
+        else:
+            # Redirect to login screen with error message
+            s = "You must login to view account website"
+            return render(request, "taapp/login.html", {"list": s})
 
+    def post(self, request):
+        # Only process if someone is logged in
+        if "name" in request.session:
+            username = request.session["name"]
+            setup.current_user = Account.objects.get(pk=username)
+            user = request.POST["name"]
+            cmd = setup.setupCommands()
+            cmd.text = "viewAccount " + user
+            s = cmd.callCommand(cmd.text)
+            context = {"user": username, "list": s}
+            return render(request, "taapp/view_account.html", context)
+        else:
+            # If not logged in, redirect to login screen with error message
+            s = "You must login to view account website"
+            return render(request, "taapp/login.html", {"list": s})
+
+          
 class ViewInstructorAssignments(View):
     def get(self, request):
         return render(request, "taapp/view_instructor_assignments.html", {"list": ''})
@@ -177,3 +208,4 @@ class ViewTAAssignments(View):
         cmd.text = "viewAccount " + request.POST["username"]
         s = cmd.callCommand(cmd.text)
         return render(request, "taapp/view_TA_assignments.html", {"list": s})
+      
