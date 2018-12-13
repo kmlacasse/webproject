@@ -36,6 +36,27 @@ class View(View):
         return render(request, "taapp/view.html", {"list":s})
 
 
+class Login(View):
+    def get(self, request):
+        return render(request, "taapp/login.html")
+
+    def post(self, request):
+        username = request.POST["username"]
+        password = request.POST["password"]
+        cmd = setup.setupCommands()
+        cmd.text = "login " + username + " " + password
+        s = cmd.callCommand(cmd.text)
+        return render(request, "taapp/login.html", {"list": s})
+
+
+class Logout(View):
+    def get(self, request):
+        return render(request, "taapp/logout.html")
+
+    def post(self, request):
+        pass
+
+
 class CreateCourse(View):
     def get(self, request):
         return render(request, "taapp/create_course.html")
@@ -46,6 +67,7 @@ class CreateCourse(View):
         s = cmd.callCommand(request.POST["command"])
         return render(request, "taapp/create_course.html", {"list":s})
 
+
 class DeleteCourse(View):
     def get(self, request):
         return render(request, "taapp/delete_course.html")
@@ -55,6 +77,7 @@ class DeleteCourse(View):
         cmd.text = request.POST["command"]
         s = cmd.callCommand(request.POST["command"])
         return render(request, "taapp/delete_course.html", {"list":s})
+
 
 class CreateAccount(View):
     def get(self, request):
@@ -120,7 +143,7 @@ class ViewLab(View):
 
 class ViewAccount(View):
     def get(self, request):
-        return render(request, "taapp/view_account.html", {"list": []})
+        return render(request, "taapp/view_account.html")
     def post(self, request):
         user = request.POST["name"]
         cmd = setup.setupCommands()
