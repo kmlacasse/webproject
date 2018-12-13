@@ -24,6 +24,8 @@ urlpatterns = [
     path(r'home.html', Home.as_view()),
     path(r'modify.html', Modify.as_view()),
     path(r'view.html', View.as_view()),
+    path(r'login.html', Login.as_view()),
+    path(r'logout.html', Logout.as_view()),
     path(r'create_course.html', CreateCourse.as_view()),
     path(r'delete_course.html', DeleteCourse.as_view()),
     path(r'create_account.html', CreateAccount.as_view()),

@@ -1,10 +1,10 @@
 {% extends "modifyButtons.html" %}
 {% block content %}
  <p class="modifyButtonTitle">Create a New Course</p>
-    <form action="views.py" method="post">
+    <form action="create_course.html" method="post"> {% csrf_token %}
         <div class="createCourseFields">
-            <p class="formText"> Course #: <input type="text" class="textInput"></p><br>
-            <p class="formText"> Course Name: <input type="text" class="textInput"></p><br>
+            <p class="formText"> Course #: <input type="text" name="courseNum" class="textInput"></p><br>
+            <p class="formText"> Course Name: <input type="text" name="courseName" class="textInput"></p><br>
             <p class="formText"> Course Subject:
                 <select class="createCourseSelect">
                     <option value="01">Computer Science</option>
@@ -39,9 +39,8 @@
                     <option value="9">9</option>
                 </select></p><br>
         </div>
-        <input type="button" class="submitModifyButton" value="Submit">
+        <input type="submit" class="submitModifyButton" value="Submit">
     </form><br>
 
-
-
-{%  endblock content %}
+    <p1 class="responseField"> Response: </p1><br>
+{% endblock content %}

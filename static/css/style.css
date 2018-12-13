@@ -1,8 +1,8 @@
-body {
+#bodyBase {
     padding-left: 45px;
     padding-right: 45px;
+    background-color: indianred;
 }
-
 
 .navBar {
     box-sizing: border-box;
@@ -112,5 +112,9 @@ body {
     padding: 8px 16px;
     cursor: pointer;
     font-size: 24px;
+}
+
+.responseField {
+    font-size: 24pt;
 }
 

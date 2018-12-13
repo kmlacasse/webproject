@@ -1,5 +1,11 @@
-{% extends base.html %}
+{% extends "base.html" %}
 {% block content %}
+<p class="modifyButtonTitle">Assign an Instructor</p>
+    <form>
+        <p class="formText"> Username: <input type="text" class="textInput"></p><br>
+        <p class="passwordField"> Password: <input type="text" class="textInput"></p><br>
 
+        <input type="button" class="submitModifyButton" value="Submit">
+    </form>
 
 {% endblock content %}
