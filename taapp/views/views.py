@@ -235,7 +235,7 @@ class ViewAccount(View):
             return render(request, "taapp/view_account.html", context)
         else:
             # Redirect to login screen with error message
-            s = "You must login to view account website"
+            s = "You must login to view this website"
             context = {"user":None, "list":s}
             return render(request, "taapp/login.html", context)
 
@@ -252,7 +252,36 @@ class ViewAccount(View):
             return render(request, "taapp/view_account.html", context)
         else:
             # If not logged in, redirect to login screen with error message
-            s = "You must login to view account website"
+            s = "You must login to view this website"
+            context = {"user": None, "list": s}
+            return render(request, "taapp/login.html", context)
+
+class ViewUsers(View):
+    def get(self, request):
+        # Make sure someone is logged in before showing this page
+        if "name" in request.session:
+            username = request.session["name"]
+            context = {"user": username}
+            return render(request, "taapp/view_users.html", context)
+        else:
+            # Redirect to login screen with error message
+            s = "You must login to this website"
+            context = {"user": None, "list": s}
+            return render(request, "taapp/login.html", context)
+
+    def post(self, request):
+        # Only process if someone is logged in
+        if "name" in request.session:
+            username = request.session["name"]
+            setup.current_user = Account.objects.get(pk=username)
+            cmd = setup.setupCommands()
+            cmd.text = "viewUsers"
+            s = cmd.callCommand(cmd.text)
+            context = {"user": username, "list": s}
+            return render(request, "taapp/view_users.html", context)
+        else:
+            # If not logged in, redirect to login screen with error message
+            s = "You must login to view this website"
             context = {"user": None, "list": s}
             return render(request, "taapp/login.html", context)
 

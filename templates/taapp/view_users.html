@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% block content %}
+    <p class="modifyButtonTitle">View All Users</p>
+    <form action="view_users.html" method="post">
+        {%  csrf_token %}
+        <input type="submit" class="submitModifyButton" value="Submit">
+    </form>
+
+    {{ list | safe}}
+
+{% endblock content %}
