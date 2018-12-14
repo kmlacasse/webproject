@@ -1,6 +1,21 @@
 {% extends "modifyButtons.html" %}
 
 {% block content %}
-<p class="modifyButtonTitle">Delete a Course</p>
+<h1 class="modifyButtonTitle">Delete a Course</h1><br>
+<h3>Please enter a valid Course ID from the list.<br>
+<form method="post" action="views.py" >
+  <input type="text" id="courseid" name="courseid"/><br>
+  <input type="submit"/>
+</form>
+<br>
 
+{% if list %}
+  <h3>{{list}}</h3>
+{% endif %}
+<dl>
+  {% for class in classes %}
+  <dt>{{class.courseid}}</dt>
+  <dd>{{class.description}}</dd>
+  {% endfor %}
+</dl>
 {% endblock content %}

@@ -2,6 +2,8 @@ from django.shortcuts import render
 from django.views import View
 
 from taapp.models import Account
+from taapp.models import Course
+from taapp.models import Section
 from . import setup
 
 
@@ -108,14 +110,16 @@ class DeleteCourse(View):
     def get(self, request):
         if "name" in request.session:
             context = {"user":request.session["name"]}
+            context['classes'] = list(Course.objects.values())
         else:
             context = {"user":None}
         return render(request, "taapp/delete_course.html", context)
 
     def post(self, request):
+        courseid = request.POST["courseid"]
         cmd = setup.setupCommands()
-        cmd.text = request.POST["command"]
-        s = cmd.callCommand(request.POST["command"])
+        cmd.text = "deleteCourse " + courseid
+        s = cmd.callCommand(cmd.txt)
         return render(request, "taapp/delete_course.html", {"list":s})
 
 
@@ -277,7 +281,7 @@ class ViewUsers(View):
             context = {"user": None, "list": s}
             return render(request, "taapp/login.html", context)
 
-          
+
 class ViewInstructorAssignments(View):
     def get(self, request):
         if "name" in request.session:
@@ -311,4 +315,3 @@ class ViewTAAssignments(View):
         else:
             context = {"list": s_list}
         return render(request, "taapp/view_TA_assignments.html", context)
-      
