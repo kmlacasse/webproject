@@ -116,11 +116,15 @@ class DeleteCourse(View):
         return render(request, "taapp/delete_course.html", context)
 
     def post(self, request):
+        s = {}
         courseid = request.POST["courseid"]
         cmd = setup.setupCommands()
-        cmd.text = "deleteCourse " + courseid
-        s = cmd.callCommand(cmd.txt)
-        return render(request, "taapp/delete_course.html", {"list":s})
+        text = "deleteCourse " + courseid
+        ret = cmd.callCommand(text)
+        s['list'] = ret
+        s['classes'] = list(Course.objects.values())
+
+        return render(request, "taapp/delete_course.html", {"list": s['list'], "classes": s['classes']})
 
 
 class CreateAccount(View):
@@ -149,11 +153,21 @@ class DeleteAccount(View):
     def get(self, request):
         if "name" in request.session:
             context = {"user":request.session["name"]}
+            context['accounts'] = list(Account.objects.values())
+
         else:
             context = {"user":None}
         return render(request, "taapp/delete_account.html", context)
     def post(self, request):
-        pass
+        s = {}
+        username = request.POST["username"]
+        cmd = setup.setupCommands()
+        text = "deleteAccount " + username
+        ret = cmd.callCommand(text)
+        s['list'] = ret
+        s['accounts'] = list(Account.objects.values())
+
+        return render(request, "taapp/delete_course.html", {"list": s['list'], "accounts": s['accounts']})
 
 
 class AssignInstructor(View):
