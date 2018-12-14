@@ -1,12 +1,42 @@
 {% extends "base.html" %}
 {% block content %}
+
     <p class="modifyButtonTitle">View an Account</p>
+
     <form action="view_account.html" method="post">
         {%  csrf_token %}
         <input type="text" name="name">
         <input type="submit" class="submitModifyButton" value="Submit">
     </form>
 
-    {{ list | safe}}
+
+    {% if error %}
+        {{ error }}
+    {% endif %}
+
+    {% if list %}
+        <br/>
+        <br/>
+        <table border="1">
+            <tr>
+                <th>Username</th>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Office Hours</th>
+                <th>Phone</th>
+                <th>Address</th>
+            </tr>
+            <tr>
+                <td>{{ list.0 }}</td>
+                <td>{{ list.1 }}</td>
+                <td>{{ list.2 }}</td>
+                <td>{{ list.3 }}</td>
+                <td>{{ list.4 }}</td>
+                <td>{{ list.5 }}</td>
+            </tr>
+        </table>
+    {% else %}
+        {{ list }}
+    {% endif %}
 
 {% endblock content %}

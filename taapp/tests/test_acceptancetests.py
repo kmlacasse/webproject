@@ -488,7 +488,6 @@ class TestAccessWebsite(BaseCase):
         pass
 
 
-@skip("Need to implement")
 class TestUserLogin(BaseCase):
     # AT for PBI 27: As a user, I can login through the webpage
 
