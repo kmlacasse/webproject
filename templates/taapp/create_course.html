@@ -1,46 +1,45 @@
-{% extends "modifyButtons.html" %}
+{% extends "base.html" %}
 {% block content %}
  <p class="modifyButtonTitle">Create a New Course</p>
-    <form action="views.py" method="post">
-        <div class="createCourseFields">
-            <p class="formText"> Course #: <input type="text" class="textInput"></p><br>
-            <p class="formText"> Course Name: <input type="text" class="textInput"></p><br>
-            <p class="formText"> Course Subject:
-                <select class="createCourseSelect">
-                    <option value="01">Computer Science</option>
-                    <option value="02">Electrical Engineering</option>
-                    <option value="03">Math</option>
-                    <option value="04">Biology</option>
-                    <option value="05">Chemistry</option>
-                </select></p><br>
-            <p class="formText"> # of Lectures:
-                <select class="createCourseSelect">
-                    <option value="1">1</option>
-                    <option value="2">2</option>
-                    <option value="3">3</option>
-                    <option value="4">4</option>
-                    <option value="5">5</option>
-                    <option value="6">6</option>
-                    <option value="7">7</option>
-                    <option value="8">8</option>
-                    <option value="9">9</option>
-                </select></p><br>
-            <p class="formText"> # of Labs:
-                <select class="createCourseSelect">
-                    <option value="0">0</option>
-                    <option value="1">1</option>
-                    <option value="2">2</option>
-                    <option value="3">3</option>
-                    <option value="4">4</option>
-                    <option value="5">5</option>
-                    <option value="6">6</option>
-                    <option value="7">7</option>
-                    <option value="8">8</option>
-                    <option value="9">9</option>
-                </select></p><br>
-        </div>
-        <input type="button" class="submitModifyButton" value="Submit">
+    <form action="create_course.html" method="post"> {% csrf_token %}
+        <p class="formText">Course #: <input type="text" name="courseNum"></p>
+        <p class="formText">Course Name: <input type="text" name="courseName"></p>
+        <p class="formText">Course Subject: <select name="courseSub" class="createCourseSelect"></p>
+            <option value="01">Computer Science</option>
+            <option value="02">Electrical Engineering</option>
+            <option value="03">Math</option>
+            <option value="04">Biology</option>
+            <option value="05">Chemistry</option>
+                </select></p>
+        <p class="formText"># of Lectures: <select name="lectureNum" class="createCourseSelect">
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+            <option value="5">5</option>
+            <option value="6">6</option>
+            <option value="7">7</option>
+            <option value="8">8</option>
+            <option value="9">9</option>
+                </select></p>
+        <p class="formText"># of Labs: <select name="labNum" class="createCourseSelect">
+            <option value="0">0</option>
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+            <option value="5">5</option>
+            <option value="6">6</option>
+            <option value="7">7</option>
+            <option value="8">8</option>
+            <option value="9">9</option>
+            </select></p>
+        <input type="submit" class="submitModifyButton" value="Submit">
     </form><br>
+
+    <p class:"responseField">Response: {{ response }}</p>
+
+{%  endblock content %}
 
 
 
