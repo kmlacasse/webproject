@@ -4,8 +4,13 @@
     <form action="create_account.html" method="post"> {% csrf_token %}
         <div class="createAccountFields">
             <p class="formText"> Username: <input type="text" name="username" class="textInput"></p><br>
-            <p class="formText"> Password: <input type="text" name="password" class="passwordInput"></p><br>
-            <p class="formText"> Role: <input type="text" name=""></p><br>
+            <p class="formText"> Password: <input type="password" name="password" class="textInput"></p><br>
+            <p class="formText"> Role: <br>
+                <input type="checkbox" name="role" value="Supervisor"> Supervisor<br>
+                <input type="checkbox" name="role" value="Administrator"> Administrator<br>
+                <input type="checkbox" name="role" value="Instructor"> Instructor<br>
+                <input type="checkbox" name="role" value="TA"> TA<br>
+            </p>
         </div>
         <input type="submit" class="submitModifyButton" value="Submit">
     </form><br>
