@@ -258,14 +258,14 @@ class TestViewAccount(BaseCase):
 
         # John views an account and can see the private information
         ret = self.cmd.callCommand("viewAccount bill")
-        self.assertIn("Downer", ret)
+        self.assertIn("bill", ret)
 
         # Now Rick is logged in instead
         setup.current_user = Account.objects.get(username="rick")
 
         # Bill views an account and can see the private information
         ret = self.cmd.callCommand("viewAccount john")
-        self.assertIn("Cramer", ret)
+        self.assertIn("john", ret)
 
         # Now Bill is logged in instead
         setup.current_user = Account.objects.get(username="bill")
@@ -441,10 +441,10 @@ class TestViewUsers(BaseCase):
 
         # John views the users
         ret = self.cmd.callCommand("viewUsers")
-        self.assertIn("John", ret)
-        self.assertIn("Rick", ret)
-        self.assertIn("Bill", ret)
-        self.assertIn("Ian", ret)
+        self.assertIn("john", ret[0])
+        self.assertIn("rick", ret[1])
+        self.assertIn("bill", ret[2])
+        self.assertIn("ian", ret[3])
 
 
 class TestCreateCourse(BaseCase):

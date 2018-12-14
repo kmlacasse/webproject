@@ -494,7 +494,7 @@ class TestUserLogin(BaseCase):
     def testUserLogin(self):
         # Ian logs in as a TA
         ret = self.cmd.callCommand("login ian TA")
-        self.assertEqual(ret, "john logged in")
+        self.assertEqual(ret, "ian logged in")
         # Try logging in again to verify that it is not possible because you are already logged in
         ret = self.cmd.callCommand("login ian TA")
         self.assertEqual(ret, "Failed. User currently logged in")
