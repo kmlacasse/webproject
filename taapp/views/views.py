@@ -287,9 +287,13 @@ class ViewInstructorAssignments(View):
         return render(request, "taapp/view_instructor_assignments.html", context)
     def post(self, request):
         cmd = setup.setupCommands()
-        cmd.text = "viewAccount " + request.POST["username"]
-        s = cmd.callCommand(cmd.text)
-        return render(request, "taapp/view_instructor_assignments.html", {"list": s})
+        cmd.text = "viewInstructorAssignments " + request.POST["username"]
+        s_list = cmd.callCommand(cmd.text)
+        if "Failed" in s_list:
+            context = {"error": s_list}
+        else:
+            context = {"list": s_list}
+        return render(request, "taapp/view_instructor_assignments.html", context)
 
 class ViewTAAssignments(View):
     def get(self, request):
@@ -300,7 +304,11 @@ class ViewTAAssignments(View):
         return render(request, "taapp/view_TA_assignments.html", context)
     def post(self, request):
         cmd = setup.setupCommands()
-        cmd.text = "viewAccount " + request.POST["username"]
-        s = cmd.callCommand(cmd.text)
-        return render(request, "taapp/view_TA_assignments.html", {"list": s})
+        cmd.text = "viewTAAssignments " + request.POST["username"]
+        s_list = cmd.callCommand(cmd.text)
+        if "Failed" in s_list:
+            context = {"error": s_list}
+        else:
+            context = {"list": s_list}
+        return render(request, "taapp/view_TA_assignments.html", context)
       
