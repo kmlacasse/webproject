@@ -14,7 +14,7 @@
         {{ error }}
     {% endif %}
 
-    {% if list %}
+    {% if list_private %}
         <br/>
         <br/>
         <table border="1">
@@ -27,12 +27,33 @@
                 <th>Address</th>
             </tr>
             <tr>
-                <td>{{ list.0 }}</td>
-                <td>{{ list.1 }}</td>
-                <td>{{ list.2 }}</td>
-                <td>{{ list.3 }}</td>
-                <td>{{ list.4 }}</td>
-                <td>{{ list.5 }}</td>
+                <td>{{ list_private.0 }}</td>
+                <td>{{ list_private.1 }}</td>
+                <td>{{ list_private.2 }}</td>
+                <td>{{ list_private.3 }}</td>
+                <td>{{ list_private.4 }}</td>
+                <td>{{ list_private.5 }}</td>
+            </tr>
+        </table>
+    {% else %}
+        {{ list }}
+    {% endif %}
+
+    {% if list_public %}
+        <br/>
+        <br/>
+        <table border="1">
+            <tr>
+                <th>Username</th>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Office Hours</th>
+            </tr>
+            <tr>
+                <td>{{ list_public.0 }}</td>
+                <td>{{ list_public.1 }}</td>
+                <td>{{ list_public.2 }}</td>
+                <td>{{ list_public.3 }}</td>
             </tr>
         </table>
     {% else %}
