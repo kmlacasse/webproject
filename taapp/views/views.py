@@ -246,11 +246,17 @@ class ViewLab(View):
     def get(self, request):
         if "name" in request.session:
             context = {"user":request.session["name"]}
+
         else:
             context = {"user":None}
         return render(request, "taapp/view_lab.html", context)
     def post(self, request):
-        pass
+        s = {}
+        labid = request.POST["labid"]
+        s['lab'] = (Course.objects.get(pk=labid))
+        s['ta'] = SectionMember.objects.get(section__pk=labid)
+        return render(request, "taapp/view_course.html", {"lab": s['lab'], "ta":s['ta']})
+
 
 
 class ViewAccount(View):
