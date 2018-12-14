@@ -26,7 +26,7 @@ class ViewTAAssignments(CmdInterface):
             return "Failed. No such username."
 
         userPermissions = setup.current_user.permissions
-        if (userPermissions[0] != '1' and userPermissions[1] != '1') or TA.username == setup.current_user.username:
+        if (userPermissions[0] != '1' and userPermissions[1] != '1') and TA.username != setup.current_user.username:
             return "Failed. Restricted action."
 
         if (TA.permissions[3] == '0'):
