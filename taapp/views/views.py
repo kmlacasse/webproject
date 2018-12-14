@@ -268,8 +268,10 @@ class ViewAccount(View):
             s_list = cmd.callCommand(cmd.text)
             if "Failed" in s_list:
                 context = {"user": username, "error": s_list}
+            elif len(s_list) > 4:
+                context = {"user": username, "list_private": s_list}
             else:
-                context = {"user": username, "list": s_list}
+                context = {"user": username, "list_public": s_list}
             return render(request, "taapp/view_account.html", context)
         else:
             # If not logged in, redirect to login screen with error message
