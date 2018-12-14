@@ -121,24 +121,68 @@ class DeleteCourse(View):
 
 class CreateAccount(View):
     def get(self, request):
+        # Make sure someone is logged in before showing this page
         if "name" in request.session:
-            context = {"user":request.session["name"]}
+            username = request.session["name"]
+            context = {"user": username}
+            return render(request, "taapp/create_account.html", context)
         else:
-            context = {"user":None}
-        return render(request, "taapp/create_account.html", context)
+            # Redirect to login screen with error message
+            s = "You must login to view this website"
+            context = {"user": None, "list": s}
+            return render(request, "taapp/login.html", context)
+
     def post(self, request):
-        pass
+        # Only process if someone is logged in
+        if "name" in request.session:
+            cmd = setup.setupCommands()
+            permissions = ""
+            for i in request.POST["checkbox"]:
+                if i is True:
+                    permissions += "1"
+                else:
+                    permissions += "0"
+            cmd.text = "createAccount " + request.POST["username"] + " " + request.POST["password"] + permissions
+            s = cmd.callCommand(request.POST["command"])
+            return render(request, "taapp/create_account.html", {"list": s})
+        else:
+            # If not logged in, redirect to login screen with error message
+            s = "You must login to view this website"
+            context = {"user": None, "list": s}
+            return render(request, "taapp/login.html", context)
+
 
 
 class EditAccount(View):
     def get(self, request):
+        # Make sure someone is logged in before showing this page
         if "name" in request.session:
-            context = {"user":request.session["name"]}
+            username = request.session["name"]
+            context = {"user": username}
+            return render(request, "taapp/create_account.html", context)
         else:
-            context = {"user":None}
-        return render(request, "taapp/edit_account.html", context)
+            # Redirect to login screen with error message
+            s = "You must login to view this website"
+            context = {"user": None, "list": s}
+            return render(request, "taapp/login.html", context)
+
     def post(self, request):
-        pass
+        if "name" in request.session:
+            cmd = setup.setupCommands()
+            permissions = ""
+            for i in request.POST["checkbox"]:
+                if i is True:
+                    permissions += "1"
+                else:
+                    permissions += "0"
+            cmd.text = "editAccount " + request.POST["username"] + " " + request.POST["password"] + " " + permissions + " " + request.POST["email"] + " " + request.POST["phone"] + " " + request.POST["password"]
+            s = cmd.callCommand(request.POST["command"])
+            return render(request, "taapp/create_account.html", {"list": s})
+        else:
+            # If not logged in, redirect to login screen with error message
+            s = "You must login to view this website"
+            context = {"user": None, "list": s}
+            return render(request, "taapp/login.html", context)
 
 
 class DeleteAccount(View):
