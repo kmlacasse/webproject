@@ -39,6 +39,7 @@ urlpatterns = [
     path(r'view_account.html', ViewAccount.as_view()),
     path(r'view_instructor_assignments.html', ViewInstructorAssignments.as_view()),
     path(r'view_TA_assignments.html', ViewTAAssignments.as_view()),
+    path(r'view_users.html', ViewUsers.as_view()),
     path('', Home.as_view()),
 
 ]

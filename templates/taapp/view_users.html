@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block content %}
+
+    <p class="modifyButtonTitle">View All Users</p>
+
+    <br/>
+    <br/>
+
+    <table border="1">
+    <tr>
+        <th>Username</th>
+        <th>Name</th>
+    </tr>
+    {%  for item in list %}
+        <tr>
+            <td>{{ item.0 }}</td>
+            <td>{{ item.1 }}</td>
+        </tr>
+    {% endfor %}
+    </table>
+
+{% endblock content %}

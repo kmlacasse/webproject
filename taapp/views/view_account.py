@@ -42,10 +42,9 @@ class ViewAccount(CmdInterface):
         return False
 
     def displayAllInfo(self, person):
-        ret = person.username + '<br>' + person.name + '<br>' + person.email + '<br>'
-        ret = ret + person.phone + '<br>' + person.address + '<br>' + person.officehours
+        ret = [person.username, person.name, person.email, person.officehours, person.phone, person.address]
         return ret
 
     def displayPublicInfo(self, person):
-        ret = person.username + '<br>' + person.name + '<br>' + person.email + '<br>' + person.officehours
+        ret = [person.username, person.name, person.email, person.officehours]
         return ret
