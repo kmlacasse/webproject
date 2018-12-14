@@ -215,17 +215,26 @@ class ViewCourse(View):
     def get(self, request):
         if "name" in request.session:
             context = {"user":request.session["name"]}
+            context['classes'] = list(Course.objects.values())
+
         else:
             context = {"user":None}
         return render(request, "taapp/view_course.html", context)
     def post(self, request):
-        pass
+        s = {}
+        courseid = request.POST["courseid"]
+        s['course'] = (Course.objects.get(pk=courseid))
+        s['classes'] = list(Course.objects.values())
+
+        return render(request, "taapp/view_course.html", {"course": s['course'], "classes": s['classes']})
+
 
 
 class ViewLecture(View):
     def get(self, request):
         if "name" in request.session:
             context = {"user":request.session["name"]}
+
         else:
             context = {"user":None}
         return render(request, "taapp/view_lecture.html", context)

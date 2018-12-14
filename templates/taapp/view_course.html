@@ -1,6 +1,33 @@
 {% extends "base.html" %}
 {% block content %}
     <p class="modifyButtonTitle">View a Course</p>
+    <h3>Please enter a valid Course ID<br>
+    <form method="post" action="view_course.html" >
+      {% csrf_token %}
+      <input type="text" id="courseid" name="courseid"/><br>
+      <input type="submit" class="submitModifyButton" value="Submit">
+    </form>
+    <br>
+    {% if course %}
+    <table border="1">
+      <tr>
+        <th>Course ID</th>
+        <th>Course Name</th>
+        <th>Lecture Count</th>
+        <th>Lab Count</th>
+      </tr>
+      <tr>
+        <td>{{course.courseID}}</td>
+        <td>{{course.courseName}}</td>
+        <td>{{course.lectureSectionCount}}</td>
+        <td>{{course.labSectionCount}}</td>
+      </tr>
+    </table>
+    {% endif %}
 
-
+    <dl>
+      {% for class in classes %}
+      <dt>Course ID : {{class.courseID}} Course Name : {{class.courseName}}</dt>
+      {% endfor %}
+    </dl>
 {% endblock content %}
