@@ -167,7 +167,7 @@ class DeleteAccount(View):
         s['list'] = ret
         s['accounts'] = list(Account.objects.values())
 
-        return render(request, "taapp/delete_course.html", {"list": s['list'], "accounts": s['accounts']})
+        return render(request, "taapp/delete_account.html", {"list": s['list'], "accounts": s['accounts']})
 
 
 class AssignInstructor(View):
