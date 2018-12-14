@@ -18,11 +18,11 @@ class ViewUsers(CmdInterface):
 
         # Get a list of all Accounts
         accountList = Account.objects.all()
-        ret = ""
+        ret = []
 
         # The accountList has to be at least one because there is a user logged in
         for i in range(accountList.count()):
-            ret = ret + accountList[i].username + "  " + accountList[i].name + '<br>'
+            ret.append([accountList[i].username, accountList[i].name])
 
         return ret
 
