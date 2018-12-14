@@ -1,6 +1,22 @@
-{% extends "modifyButtons.html" %}
+{% extends "base.html" %}
 
 {% block content %}
-<p class="modifyButtonTitle">Delete an Account</p>
+<h1 class="modifyButtonTitle">Delete an Account</h1><br>
+<h3>Please enter a valid Username<br>
+<form method="post" action="delete_account.html" >
+  {% csrf_token %}
+  <input type="text" id="username" name="username"/><br>
+  <input type="submit"/>
+</form>
+<br>
 
+{% if list %}
+  <h3>{{list}}</h3>
+{% endif %}
+<dl>
+  {% for account in accounts %}
+  <dt>Username : {{account.username}}</dt>
+  <dd>Account Name : {{account.name}} Account Email : {{account.email}} Account Phone : {{account.phone}}</dd>
+  {% endfor %}
+</dl>
 {% endblock content %}

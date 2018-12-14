@@ -33,12 +33,12 @@ class ViewTAAssignments(CmdInterface):
             return "Failed. Username is not a TA."
 
         sectionList = list(SectionMember.objects.filter(account__username=TA.username))
-        retString = ""
+        ret = []
         for i in sectionList:
             section = file.readData(i.section.sectionID, 'Section')
-            retString += (section.sectionID + "-" + section.sectionName + '\n')
+            ret.append([section.sectionID, section.sectionName])
 
-        return retString
+        return ret
 
 
     def validateInputParameters(self, command_items):

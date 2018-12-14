@@ -2,6 +2,8 @@ from django.shortcuts import render
 from django.views import View
 
 from taapp.models import Account
+from taapp.models import Course
+from taapp.models import Section
 from . import setup
 
 
@@ -108,15 +110,21 @@ class DeleteCourse(View):
     def get(self, request):
         if "name" in request.session:
             context = {"user":request.session["name"]}
+            context['classes'] = list(Course.objects.values())
         else:
             context = {"user":None}
         return render(request, "taapp/delete_course.html", context)
 
     def post(self, request):
+        s = {}
+        courseid = request.POST["courseid"]
         cmd = setup.setupCommands()
-        cmd.text = request.POST["command"]
-        s = cmd.callCommand(request.POST["command"])
-        return render(request, "taapp/delete_course.html", {"list":s})
+        text = "deleteCourse " + courseid
+        ret = cmd.callCommand(text)
+        s['list'] = ret
+        s['classes'] = list(Course.objects.values())
+
+        return render(request, "taapp/delete_course.html", {"list": s['list'], "classes": s['classes']})
 
 
 class CreateAccount(View):
@@ -189,11 +197,21 @@ class DeleteAccount(View):
     def get(self, request):
         if "name" in request.session:
             context = {"user":request.session["name"]}
+            context['accounts'] = list(Account.objects.values())
+
         else:
             context = {"user":None}
         return render(request, "taapp/delete_account.html", context)
     def post(self, request):
-        pass
+        s = {}
+        username = request.POST["username"]
+        cmd = setup.setupCommands()
+        text = "deleteAccount " + username
+        ret = cmd.callCommand(text)
+        s['list'] = ret
+        s['accounts'] = list(Account.objects.values())
+
+        return render(request, "taapp/delete_account.html", {"list": s['list'], "accounts": s['accounts']})
 
 
 class AssignInstructor(View):
@@ -294,8 +312,10 @@ class ViewAccount(View):
             s_list = cmd.callCommand(cmd.text)
             if "Failed" in s_list:
                 context = {"user": username, "error": s_list}
+            elif len(s_list) > 4:
+                context = {"user": username, "list_private": s_list}
             else:
-                context = {"user": username, "list": s_list}
+                context = {"user": username, "list_public": s_list}
             return render(request, "taapp/view_account.html", context)
         else:
             # If not logged in, redirect to login screen with error message
@@ -321,7 +341,7 @@ class ViewUsers(View):
             context = {"user": None, "list": s}
             return render(request, "taapp/login.html", context)
 
-          
+
 class ViewInstructorAssignments(View):
     def get(self, request):
         if "name" in request.session:
@@ -331,9 +351,13 @@ class ViewInstructorAssignments(View):
         return render(request, "taapp/view_instructor_assignments.html", context)
     def post(self, request):
         cmd = setup.setupCommands()
-        cmd.text = "viewAccount " + request.POST["username"]
-        s = cmd.callCommand(cmd.text)
-        return render(request, "taapp/view_instructor_assignments.html", {"list": s})
+        cmd.text = "viewInstructorAssignments " + request.POST["username"]
+        s_list = cmd.callCommand(cmd.text)
+        if "Failed" in s_list:
+            context = {"error": s_list}
+        else:
+            context = {"list": s_list}
+        return render(request, "taapp/view_instructor_assignments.html", context)
 
 class ViewTAAssignments(View):
     def get(self, request):
@@ -344,7 +368,10 @@ class ViewTAAssignments(View):
         return render(request, "taapp/view_TA_assignments.html", context)
     def post(self, request):
         cmd = setup.setupCommands()
-        cmd.text = "viewAccount " + request.POST["username"]
-        s = cmd.callCommand(cmd.text)
-        return render(request, "taapp/view_TA_assignments.html", {"list": s})
-      
+        cmd.text = "viewTAAssignments " + request.POST["username"]
+        s_list = cmd.callCommand(cmd.text)
+        if "Failed" in s_list:
+            context = {"error": s_list}
+        else:
+            context = {"list": s_list}
+        return render(request, "taapp/view_TA_assignments.html", context)
