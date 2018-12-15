@@ -25,13 +25,13 @@ class ViewLab(CmdInterface):
             return "Failed. Lab section does not exist"
 
         TA_name = ""
-        section_member = file.readData(section_data, 'SectionMember')
+        section_member = file.readData(section_data.sectionID, 'SectionMember')
         if section_member is not None:
             # Means that there is an instructor assigned to the lecture
             TA_name += section_member.account.name
 
 
-        ret_str = "Lab ID: " + command_items[1] + '<br>' + "Section Name: " + section_data.sectionName + '<br>' +  "TA: " + Ta_name
+        ret_str = "Lab ID: " + command_items[1] + '  ' + "Section Name: " + section_data.sectionName + '   ' +  "TA: " + TA_name
         return ret_str
 
     def validateInputParameters(self, parameters):
