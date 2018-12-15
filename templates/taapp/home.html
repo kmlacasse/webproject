@@ -1,13 +1,23 @@
 {% extends "base.html" %}
 {% block content %}
-    <p class="homeWelcome">New to the app?</p>
-    <form method ="get" class="signUpButton" action="">
-        <button type="submit">Sign up</button>
-    </form>
 
+    <h class="homeHeader">TA Scheduling App</h><br><br>
 
-    <br>Documentation<a href = "">
+    <a href="documentation.docx" class="docWord">Documentation</a><br>
 
+    <p class="homeSec">About this app: </p>
+    <p class="homeText">This application should be used by the faculty
+        of a university to access the courses they are assigned to and
+        for the supervisors of the departments to create the courses
+        and assign instructors and TA’s accordingly. </p><br>
+    <p class="homeSec">Developers Message: </p>
+    <p class="homeText">This application should be used by the faculty
+        of a university to access the courses they are assigned to and
+        for the supervisors of the departments to create the courses
+        and assign instructors and TA’s accordingly. </p><br><br>
 
+    <p class="emailText"> Have a question?
+        <a href="mailto:fhoffman@uwm.edu">Click here to send us an email.</a></p>
 
 {%  endblock content %}
+
