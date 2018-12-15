@@ -92,14 +92,14 @@ class TestSupervisorCreateAccount(BaseCase):
     def testSupervisorCreateAccount(self):
         # John has a supervisor account
         # John logs in
-        self.cmd.callCommand("login john super")
+        self.c.post('http://127.0.0.1:8000/login.html', {'username': 'john', 'password': 'super'})
         # John creates an account which does not yet exist
-        ret = self.cmd.callCommand("createAccount tim default 1000")
-        self.assertEqual(ret, "Account tim successfully added")
+        ret = self.c.post('http://127.0.0.1:8000/create_account.html', {'username': 'tim', 'password':'default','role':'1000'})
+        self.assertIn(b"Account tim successfully added", ret.content)
         # Login to new account to verify that it was created
-        self.cmd.callCommand("logout")
-        ret = self.cmd.callCommand("login tim default")
-        self.assertEqual(ret, "tim logged in")
+        self.c.post('http://127.0.0.1:8000/logout.html')
+        ret = self.c.post('http://127.0.0.1:8000/login.html', {'username': 'tim', 'password': 'default'})
+        self.assertIn(b"tim logged in", ret.content)
 
 
 class TestSupervisorDeleteAccount(BaseCase):
@@ -108,16 +108,17 @@ class TestSupervisorDeleteAccount(BaseCase):
     def testSupervisorDeleteAccount(self):
         # John has a supervisor account
         # John logs in
-        self.cmd.callCommand("login john super")
-        # Create the user account that will be deleted
-        self.cmd.callCommand("createAccount tim default 0010")
-        # John deletes an account for an existing user
-        ret = self.cmd.callCommand("deleteAccount tim")
-        self.assertEqual(ret, "Account tim successfully removed.")
+        self.c.post('http://127.0.0.1:8000/login.html', {'username': 'john', 'password': 'super'})
+        # John creates an account which does not yet exist
+        ret = self.c.post('http://127.0.0.1:8000/create_account.html', {'username': 'tim', 'password':'default','role':'1000'})
+        self.assertIn(b"Account tim successfully added", ret.content)
+        # John deletes the account
+        ret = self.c.post('http://127.0.0.1:8000/delete_account.html', {'username': 'tim'})
+        self.assertIn(b"Account tim successfully removed.", ret.content)
         # Try to login to account to verify that it does not exist
-        self.cmd.callCommand("logout")
-        ret = self.cmd.callCommand("login tim default")
-        self.assertEqual(ret, "Failed. No such username")
+        self.c.post('http://127.0.0.1:8000/logout.html')
+        ret = self.c.post('http://127.0.0.1:8000/login.html', {'username': 'tim', 'password': 'default'})
+        self.assertIn(b"Failed. No such username", ret.content)
 
 
 @skip("Save for a future Sprint")
@@ -186,7 +187,6 @@ class TestSupervisorViewLabsCourse(BaseCase):
         self.assertIn(b"3", ret.content)
 
 
-@skip("Wait for this to be implemented")
 class TestSupervisorAssignTAtoCourse(BaseCase):
     # AT for PBI 10:  As a supervisor, I would like to be able to assign TAs to courses through a webpage,
     # so that each course would have sufficient number of TAs
@@ -197,9 +197,25 @@ class TestSupervisorAssignTAtoCourse(BaseCase):
         self.cmd.callCommand("deleteAccount ian")
 
     def testSupervisorAssignTAtoCourse(self):
-        pass
+        # John logs in
+        self.c.post('http://127.0.0.1:8000/login.html', {'username': 'john', 'password': 'super'})
+        # Create a course
+        ret = self.c.post('http://127.0.0.1:8000/create_course.html',
+                          {'courseSub': '01', 'courseNum': '361', 'lectureNum': '1', 'labNum': '3',
+                           'courseName': 'Introduction to Software Engineering'})
+        # Create an instructor
+        self.cmd.callCommand("createAccount tim default 0010")
+        # John assigns an instructor to a course
+        ret = self.c.post('http://127.0.0.1:8000/assign_instructor.html',
+                          {'username': 'tim', 'courseID': '01361', 'lecture': '1'})
+        self.assertIn(b"tim successfully assigned", ret.content)
+        # Create a TA
+        self.c.post('http://127.0.0.1:8000/create_account.html',
+                          {'username': 'logan', 'password': 'pass123', 'role': '0001'})
+        # John assigns a TA to a course
+        self.c.post('http://127.0.0.1:8000/assign_TA.html', {'username':'logan', 'courseID':'01361'})
 
-@skip("Wait for this to be implemented")
+
 class TestSupervisorAssignTAtoLab(BaseCase):
     # AT for PBI 11:  As a supervisor, I would like to be able to assign TAs to specific lab sections
     # through a webpage, so that TAs can work around their schedule
@@ -223,12 +239,12 @@ class TestSupervisorAssignTAtoLab(BaseCase):
                           {'username': 'tim', 'courseID': '01361', 'lecture': '1'})
         self.assertIn(b"tim successfully assigned", ret.content)
         # Create a TA
-        self.cmd.callCommand("createAccount logan pass123 0001")
+        self.c.post('http://127.0.0.1:8000/create_account.html', {'username': 'logan', 'password': 'pass123', 'role': '0001'})
         # John assigns a TA to a course
-        self.cmd.callCommand("assignTA logan 01361")
+        self.c.post('http://127.0.0.1:8000/assign_TA.html', {'username':'logan', 'courseID':'01361'})
         # John assigns a TA to a lab section
-        ret = self.cmd.callCommand("assignTAtoLab logan 01361101")
-        self.assertIn("logan successfully assigned", ret)
+        ret = self.c.post('http://127.0.0.1:8000/assign_TA.html', {'username': 'logan', 'courseID': '01361101'})
+        self.assertIn(b"logan successfully assigned", ret.content)
 
 
 class TestSupervisorAssignInstructortoCourse(BaseCase):
@@ -297,14 +313,14 @@ class TestAdministratorCreateAccount(BaseCase):
     def testAdministratorCreateAccount(self):
         # Rick has an administrator account
         # Rick logs in
-        self.cmd.callCommand("login rick admin")
+        self.c.post('http://127.0.0.1:8000/login.html', {'username': 'rick', 'password': 'admin'})
         # Rick creates an account which does not yet exist
-        ret = self.cmd.callCommand("createAccount tim default 1000")
-        self.assertEqual(ret, "Account tim successfully added")
+        ret = self.c.post('http://127.0.0.1:8000/create_account.html', {'username': 'tim', 'password':'default','role':'1000'})
+        self.assertIn(b"Account tim successfully added", ret.content)
         # Login to new account to verify that it was created
-        self.cmd.callCommand("logout")
-        ret = self.cmd.callCommand("login tim default")
-        self.assertEqual(ret, "tim logged in")
+        self.c.post('http://127.0.0.1:8000/logout.html')
+        ret = self.c.post('http://127.0.0.1:8000/login.html', {'username': 'tim', 'password': 'default'})
+        self.assertIn(b"tim logged in", ret.content)
 
 
 class TestAdministratorDeleteAccount(BaseCase):
@@ -313,16 +329,17 @@ class TestAdministratorDeleteAccount(BaseCase):
     def testAdministratorDeleteAccount(self):
         # Rick has an administrator account
         # Rick logs in
-        self.cmd.callCommand("login rick admin")
-        # Create the user account that will be deleted
-        self.cmd.callCommand("createAccount tim default 0010")
-        # Rick deletes an account for an existing user
-        ret = self.cmd.callCommand("deleteAccount tim")
-        self.assertEqual(ret, "Account tim successfully removed.")
+        self.c.post('http://127.0.0.1:8000/login.html', {'username': 'rick', 'password': 'admin'})
+        # Rick creates an account which does not yet exist
+        ret = self.c.post('http://127.0.0.1:8000/create_account.html', {'username': 'tim', 'password':'default','role':'1000'})
+        self.assertIn(b"Account tim successfully added", ret.content)
+        # Rick deletes the account
+        ret = self.c.post('http://127.0.0.1:8000/delete_account.html', {'username': 'tim'})
+        self.assertIn(b"Account tim successfully removed.", ret.content)
         # Try to login to account to verify that it does not exist
-        self.cmd.callCommand("logout")
-        ret = self.cmd.callCommand("login tim default")
-        self.assertEqual(ret, "Failed. No such username")
+        self.c.post('http://127.0.0.1:8000/logout.html')
+        ret = self.c.post('http://127.0.0.1:8000/login.html', {'username': 'tim', 'password': 'default'})
+        self.assertIn(b"Failed. No such username", ret.content)
 
 
 @skip("Save for a future Sprint")
@@ -406,7 +423,6 @@ class TestInstructorViewAssignmentInstructor(BaseCase):
         self.assertIn(b"Introduction to Software Engineering", ret.content)
 
 
-@skip("Wait for this to be implemented")
 class TestInstructorAssignTAtoLab(BaseCase):
     # AT for PBI 21: As an Instructor, I want to be able to assign my TAS to particular lab sections through a webpage
 
@@ -423,12 +439,19 @@ class TestInstructorAssignTAtoLab(BaseCase):
         ret = self.c.post('http://127.0.0.1:8000/assign_instructor.html',
                           {'username': 'tim', 'courseID': '01361', 'lecture': '1'})
         self.assertIn(b"tim successfully assigned", ret.content)
+        # Create a TA
+        self.c.post('http://127.0.0.1:8000/create_account.html',
+                    {'username': 'logan', 'password': 'pass123', 'role': '0001'})
+        # Assign a TA to a course
+        self.c.post('http://127.0.0.1:8000/assign_TA.html', {'username':'logan', 'courseID':'01361'})
         # Assume Tim is an Instructor
+        self.c.post('http://127.0.0.1:8000/logout.html')
         self.c.post('http://127.0.0.1:8000/login.html', {'username': 'tim', 'password': 'default'})
-
-
+        # Tim assigns a TA to a lab section
+        ret = self.c.post('http://127.0.0.1:8000/assign_TA.html', {'username': 'logan', 'courseID': '01361101'})
+        self.assertIn(b"logan successfully assigned", ret.content)
         # Assume TA Bob is assigned to course 01361
-        et = self.c.post('http://127.0.0.1:8000/assign_TA_to_lab.html', {'name': 'bob', 'course':'01361', 'lab':'101'})
+        ret = self.c.post('http://127.0.0.1:8000/assign_TA_to_lab.html', {'name': 'bob', 'course':'01361', 'lab':'101'})
         self.assertIn(b"bob successfully assigned", ret.content)
 
         #ret = self.cmd.callCommand("viewCourse 01361")
@@ -465,6 +488,7 @@ class TestTAEditPersonalInfo(BaseCase):
         self.assertIn("(414)555-5555", ret)
 
 
+@skip("Waiting to implement")
 class TestTAViewAssignments(BaseCase):
     # AT for PBI 24: As a TA, I want to be able to view TA assignments through a webpage
 
@@ -508,4 +532,3 @@ class TestUserLogin(BaseCase):
         # Try logging in again to verify that it is not possible because you are already logged in
         ret = self.cmd.callCommand("login ian TA")
         self.assertEqual(ret, "Failed. User currently logged in")
-
