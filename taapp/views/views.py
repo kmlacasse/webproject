@@ -99,13 +99,20 @@ class CreateCourse(View):
             context = {"user":None}
         return render(request, "taapp/create_course.html", context)
 
-    def post(self,request):
+    def post(self, request):
+        s = {}
+        cNum = request.POST["courseNum"]
+        cName = request.POST["courseName"]
+        cSub = request.POST["courseSub"]
+        cLecNum = request.POST["lectureNum"]
+        cLabNum = request.POST["labNum"]
         cmd = setup.setupCommands()
-        cmd.text = request.POST["command"]
-        s = cmd.callCommand(request.POST["command"])
-        return render(request, "taapp/create_course.html", {"list":s})
+        text = "createCourse " + cSub + cNum + " " +  cLecNum + " " + cLabNum + " " + cName
+        ret = cmd.callCommand(text)
+        s['response'] = ret
+        return render(request, "taapp/create_course.html", {"response": s['response']})
 
-
+    
 class DeleteCourse(View):
     def get(self, request):
         if "name" in request.session:
