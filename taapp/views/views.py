@@ -181,8 +181,7 @@ class EditAccount(View):
         if "name" in request.session:
             username = request.session["name"]
             user = Account.objects.get(username=username)
-            hasPermissions = user.permissions[0] == '1' or user.permissions[1] == '1'
-            context = {"user": username, "permissions": hasPermissions, "userName": user.name, "userPassword": user.password, "userEmail": user.email, "userPhone": user.phone, "userAddress": user.address, "userHours": user.officehours}
+            context = {"user": username, "userName": user.name, "userPassword": user.password, "userEmail": user.email, "userPhone": user.phone, "userAddress": user.address, "userHours": user.officehours}
             return render(request, "taapp/edit_account.html", context)
         else:
             # Redirect to login screen with error message
@@ -192,24 +191,22 @@ class EditAccount(View):
 
     def post(self, request):
         if "name" in request.session:
+            username = request.session["name"]
             cmd = setup.setupCommands()
-            cmd.text = "editAccount " + request.POST["name"] + " password " + request.POST["password"]
+            cmd.text = "editAccount " + username + " password " + request.POST["password"]
             cmd.callCommand(cmd.text)
-            cmd.text = "editAccount " + request.POST["name"] + " name " + request.POST["name"]
+            cmd.text = "editAccount " + username + " name " + request.POST["name"]
             cmd.callCommand(cmd.text)
-            cmd.text = "editAccount " + request.POST["name"] + " address " + request.POST["address"]
+            cmd.text = "editAccount " + username + " address " + request.POST["address"]
             cmd.callCommand(cmd.text)
-            cmd.text = "editAccount " + request.POST["name"] + " officehours " + request.POST["officehours"]
+            cmd.text = "editAccount " + username + " officehours " + request.POST["officehours"]
             cmd.callCommand(cmd.text)
-            cmd.text = "editAccount " + request.POST["name"] + " phone " + request.POST["phone"]
+            cmd.text = "editAccount " + username + " phone " + request.POST["phone"]
             cmd.callCommand(cmd.text)
-            cmd.text = "editAccount " + request.POST["name"] + " email " + request.POST["email"]
+            cmd.text = "editAccount " + username + " email " + request.POST["email"]
             s = cmd.callCommand(cmd.text)
-            print(s)
-            if "Failed" in s:
-                context = {"error": s}
-            else:
-                context = {"list": s}
+            user = Account.objects.get(username=username)
+            context = {"user": username, "userName": user.name, "userPassword": user.password, "userEmail": user.email, "userPhone": user.phone, "userAddress": user.address, "userHours": user.officehours, "list": s}
             return render(request, "taapp/edit_account.html", context)
         else:
             # If not logged in, redirect to login screen with error message
