@@ -2,9 +2,7 @@
 {% block content %}
     <p class="modifyButtonTitle">View TA Assignments</p>
     <form action="view_TA_assignments.html" method="post"> {%  csrf_token %}
-        <div class="viewTAassignmentsFields">
-            <p class="formText"> TA Username: <input type="text" name="username" class="textInput"></p><br>
-        </div>
+        <p class="formText"> TA Username: <input type="text" name="username" class="textInput"></p><br>
         <input type="submit" class="submitModifyButton" value="Submit">
     </form>
 
