@@ -4,6 +4,8 @@ from django.views import View
 from taapp.models import Account
 from taapp.models import Course
 from taapp.models import Section
+from taapp.models import SectionMember
+
 from . import setup
 
 
@@ -112,7 +114,7 @@ class CreateCourse(View):
         s['response'] = ret
         return render(request, "taapp/create_course.html", {"response": s['response']})
 
-    
+
 class DeleteCourse(View):
     def get(self, request):
         if "name" in request.session:
@@ -246,23 +248,28 @@ class ViewLecture(View):
             context = {"user":None}
         return render(request, "taapp/view_lecture.html", context)
     def post(self, request):
-        pass
+        lecture = request.POST["lectureid"]
+        cmd = setup.setupCommands()
+        cmd.text = "viewLecture " + lecture
+        ret = cmd.callCommand(cmd.text)
+        strings = ret
+        return render(request, "taapp/view_lecture.html", {"lecture": strings})
 
 
 class ViewLab(View):
     def get(self, request):
         if "name" in request.session:
             context = {"user":request.session["name"]}
-
         else:
             context = {"user":None}
         return render(request, "taapp/view_lab.html", context)
     def post(self, request):
-        s = {}
-        labid = request.POST["labid"]
-        s['lab'] = (Course.objects.get(pk=labid))
-        s['ta'] = SectionMember.objects.get(section__pk=labid)
-        return render(request, "taapp/view_course.html", {"lab": s['lab'], "ta":s['ta']})
+        lab = request.POST["labid"]
+        cmd = setup.setupCommands()
+        cmd.text = "viewLab " + lab
+        ret = cmd.callCommand(cmd.text)
+        strings = ret
+        return render(request, "taapp/view_lab.html", {"lab": strings})
 
 
 

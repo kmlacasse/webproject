@@ -1,6 +1,14 @@
 {% extends "base.html" %}
 {% block content %}
     <p class="modifyButtonTitle">View a Lecture Section</p>
-
-
+    <h3>Please enter a valid Lecture Section ID</h3><br>
+    <form method="post" action="view_lecture.html" >
+      {% csrf_token %}
+      <input type="text" id="lectureid" name="lectureid"/><br>
+      <input type="submit" class="submitModifyButton" value="Submit">
+    </form>
+    <br>
+    {% if lecture %}
+    <p>{{lecture}}{{ta}</p>
+    {% endif %}
 {% endblock content %}
