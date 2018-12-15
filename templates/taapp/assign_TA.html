@@ -3,14 +3,10 @@
 {% block content %}
 <p class="modifyButtonTitle">Assign a TA to a Course</p>
     <form action="assign_TA.html" method="post"> {%  csrf_token %}
-        <div class="assignTAFields">
-            <p class="formText"> TA Username: <input type="text" name="username" class="textInput"></p><br>
-            <p class="formText"> Course #: <input type="text" name="courseID" class="textInput"></p><br>
-        </div>
+        <p class="formText"> TA Username: <input type="text" name="username" class="textInput"></p><br>
+        <p class="formText"> Course #: <input type="text" name="courseID" class="textInput"></p><br>
         <input type="submit" class="submitModifyButton" value="Submit">
     </form>
 
-    <p>
-        {{list}}
-    </p>
+    <p class="responseText">Response: {{ list }}</p>
 {% endblock content %}

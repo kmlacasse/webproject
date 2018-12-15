@@ -1,12 +1,12 @@
 {% extends "base.html" %}
 
 {% block content %}
-<h1 class="modifyButtonTitle">Delete a Course</h1><br>
-<h3>Please enter a valid Course ID<br>
+<p class="modifyButtonTitle">Delete a Course</p><br>
+
 <form method="post" action="delete_course.html" >
   {% csrf_token %}
-  <input type="text" id="courseid" name="courseid"/><br>
-  <input type="submit"/>
+    <p class="formText">Course ID: <input type="text" class="textInput" id="courseid" name="courseid"/></p><br>
+    <input type="submit" class="submitModifyButton" value="Submit">
 </form>
 <br>
 

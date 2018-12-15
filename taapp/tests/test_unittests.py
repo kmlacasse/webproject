@@ -683,7 +683,7 @@ class TestViewInstructorAssignments(BaseCase):
 
         #view bill's assignments
         ret = self.cmd.callCommand("viewInstructorAssignments bill")
-        self.assertEquals(ret, "013611")
+        self.assertIn("013611", ret[0])
 
         #logout
         self.cmd.callCommand("logout")
@@ -693,7 +693,7 @@ class TestViewInstructorAssignments(BaseCase):
 
         #view bill's assignments as bill
         ret = self.cmd.callCommand("viewInstructorAssignments bill")
-        self.assertEquals(ret, "013611")
+        self.assertIn("013611", ret[0])
 
     def testViewInstructorAssignmentsInvalid(self):
         #no user logged in
@@ -741,7 +741,7 @@ class TestViewTAAssignments(BaseCase):
 
         #view ian's assignments
         ret = self.cmd.callCommand("viewTAAssignments ian")
-        self.assertEquals(ret, "01361101")
+        self.assertIn("01361101", ret[0])
 
         #logout
         self.cmd.callCommand("logout")
@@ -751,7 +751,7 @@ class TestViewTAAssignments(BaseCase):
 
         #view ian's assignments as ian
         ret = self.cmd.callCommand("viewTAAssignments ian")
-        self.assertEquals(ret, "01361101")
+        self.assertIn("01361101", ret[0])
 
     def testViewTAAssignmentsInvalid(self):
         #no user logged in

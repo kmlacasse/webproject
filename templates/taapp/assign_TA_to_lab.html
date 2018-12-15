@@ -7,7 +7,7 @@
             <p class="formText"> TA Username: <input type="text" name="username" class="textInput"></p><br>
             <p class="formText"> Course #: <input type="text" name="courseID" class="textInput"></p><br>
             <p class="formText"> Lab #:
-                <select class="assignInstructorSelect" name="lab">
+                <select class="selectDropdown" name="lab">
                     <option value="101">Lab 1</option>
                     <option value="102">Lab 2</option>
                     <option value="103">Lab 3</option>
@@ -22,7 +22,6 @@
         <input type="submit" class="submitModifyButton" value="Submit">
     </form><br>
 
-    <p>
-        {{list}}
-    </p>
+    <p class="responseText">Response: {{ list }}</p>
+
 {% endblock content %}
