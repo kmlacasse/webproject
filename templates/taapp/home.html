@@ -1,9 +1,10 @@
 {% extends "base.html" %}
+{% load staticfiles %}
 {% block content %}
 
     <h class="homeHeader">TA Scheduling App</h><br><br>
 
-    <a href="documentation.docx" class="docWord">Documentation</a><br>
+    <a href="{% static "docs/Team 404 - Command Manual.docx" %}" class="docWord">Documentation</a><br>
 
     <p class="homeSec">About this app: </p>
     <p class="homeText">This application should be used by the faculty
