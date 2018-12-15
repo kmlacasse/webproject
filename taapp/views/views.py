@@ -152,11 +152,22 @@ class CreateAccount(View):
         if "name" in request.session:
             cmd = setup.setupCommands()
             permissions = ""
-            for i in request.POST["checkbox"]:
-                if i is True:
-                    permissions += "1"
-                else:
-                    permissions += "0"
+            if request.POST["role1"] is True:
+                permissions += "1"
+            else:
+                permissions += "0"
+            if request.POST["role2"] is True:
+                permissions += "1"
+            else:
+                permissions += "0"
+            if request.POST["role3"] is True:
+                permissions += "1"
+            else:
+                permissions += "0"
+            if request.POST["role4"] is True:
+                permissions += "1"
+            else:
+                permissions += "0"
             cmd.text = "createAccount " + request.POST["username"] + " " + request.POST["password"] + permissions
             s = cmd.callCommand(request.POST["command"])
             if "Failed" in s_list:
