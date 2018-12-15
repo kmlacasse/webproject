@@ -2,16 +2,16 @@
 {% block content %}
  <p class="modifyButtonTitle">Create a New Course</p>
     <form action="create_course.html" method="post"> {% csrf_token %}
-        <p class="formText">Course #: <input type="text" name="courseNum"></p>
-        <p class="formText">Course Name: <input type="text" name="courseName"></p>
-        <p class="formText">Course Subject: <select name="courseSub" class="createCourseSelect"></p>
+        <p class="formText">Course #: <input type="text" class="textInput" name="courseNum"></p><br>
+        <p class="formText">Course Name: <input type="text" class="textInput" name="courseName"></p><br>
+        <p class="formText">Course Subject: <select name="courseSub" class="selectDropdown"></p><br>
             <option value="01">Computer Science</option>
             <option value="02">Electrical Engineering</option>
             <option value="03">Math</option>
             <option value="04">Biology</option>
             <option value="05">Chemistry</option>
-                </select></p>
-        <p class="formText"># of Lectures: <select name="lectureNum" class="createCourseSelect">
+                </select></p><br>
+        <p class="formText"># of Lectures: <select name="lectureNum" class="selectDropdown">
             <option value="1">1</option>
             <option value="2">2</option>
             <option value="3">3</option>
@@ -21,8 +21,8 @@
             <option value="7">7</option>
             <option value="8">8</option>
             <option value="9">9</option>
-                </select></p>
-        <p class="formText"># of Labs: <select name="labNum" class="createCourseSelect">
+                </select></p><br>
+        <p class="formText"># of Labs: <select name="labNum" class="selectDropdown">
             <option value="0">0</option>
             <option value="1">1</option>
             <option value="2">2</option>
@@ -33,11 +33,12 @@
             <option value="7">7</option>
             <option value="8">8</option>
             <option value="9">9</option>
-            </select></p>
+            </select></p><br>
         <input type="submit" class="submitModifyButton" value="Submit">
     </form><br>
 
-    <p class=responseField">Response: {{ response }}</p>
-
+    <p class="responseText">Response: {{ response }}</p>
 {%  endblock content %}
+
+
 
