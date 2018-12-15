@@ -1,13 +1,28 @@
 {% extends "base.html" %}
 {% block content %}
 <br><br>
-    <button class="viewButton"><a href="view_course.html">View Course</a></button><br><br>
-    <button class="viewButton"><a href="view_lecture.html">View Lecture</a></button><br><br>
-    <button class="viewButton"><a href="view_lab.html">View Lab</a></button><br><br>
-    <button class="viewButton"><a href="view_users.html">View All Users</a></button><br><br>
-    <button class="viewButton"><a href="view_account.html">View Account</a></button><br><br>
-    <button class="viewButton"><a href="view_instructor_assignments.html">View Instructor Assignments</a></button><br><br>
-    <button class="viewButton"><a href="view_TA_assignments.html">View TA Assignments</a></button><br><br>
+    <table class="mainPageTable">
+        <tr>
+            <th><p class="buttonTypeTag">View Course Info</p></th>
+            <th><p class="buttonTypeTag">View Account Info</p></th>
+        </tr>
+        <tr>
+            <td><button class="viewButton"><a href="view_course.html">View Course</a></button></td>
+            <td><button class="viewButton"><a href="view_account.html">View Account</a></button></td>
+        </tr>
+        <tr>
+            <td><button class="viewButton"><a href="view_lecture.html">View Lecture</a></button></td>
+            <td><button class="viewButton"><a href="view_users.html">View All Users</a></button></td>
+        </tr>
+        <tr>
+            <td><button class="viewButton"><a href="view_lab.html">View Lab</a></button></td>
+            <td></td>
+        </tr>
+        <tr><th><p class="buttonTypeTag">View Account Assignments</p></th></tr>
+        <tr><td><button class="viewButton"><a href="view_instructor_assignments.html">View Instructor Assignments</a></button></td></tr>
+        <tr><td><button class="viewButton"><a href="view_TA_assignments.html">View TA Assignments</a></button></td></tr>
+
+    </table>
 
 
 
