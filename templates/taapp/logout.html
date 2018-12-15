@@ -4,12 +4,9 @@
 
     <form action="logout.html" method="post">
         {% csrf_token %}
-        If you want to logout, click Submit:
+        <p class="formText">If you want to logout, click Submit: </p>
         <input type="submit" class="submitModifyButton" value="Submit">
     </form>
-
-        <p class="responseText">Response: {{ list }}</p>
-
-
+    <p class="responseText">Response: {{ list }}</p>
 
 {% endblock content %}
