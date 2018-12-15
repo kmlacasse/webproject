@@ -1,14 +1,14 @@
 {% extends "base.html" %}
 {% block content %}
     <p class="modifyButtonTitle">View a Lab Section</p>
-    <h3>Please enter a valid Lab ID</h3><br>
+ 
     <form method="post" action="view_lab.html" >
       {% csrf_token %}
-      <input type="text" id="labid" name="labid"/><br>
+      <p class="formText"> Lab Section ID: <input type="text" class="textInput" id="labid" name="labid"/></p><br>
       <input type="submit" class="submitModifyButton" value="Submit">
     </form>
     <br>
     {% if lab %}
-    <p>{{lab}}</p>
+    <p class="responseText">Response: {{ lab }}</p>
     {% endif %}
 {% endblock content %}
