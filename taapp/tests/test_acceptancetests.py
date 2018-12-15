@@ -480,12 +480,13 @@ class TestTAViewPublicInfo(BaseCase):
         self.assertIn("bill", ret)
 
 
-@skip("Need to implement")
 class TestAccessWebsite(BaseCase):
     # AT for PBI 26: As a visitor, I can access the homepage
 
     def testAccessWebsite(self):
-        pass
+        response = self.client.get("http://127.0.0.1:8000/")
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'base.html')
 
 
 class TestUserLogin(BaseCase):
