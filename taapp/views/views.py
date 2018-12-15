@@ -170,7 +170,7 @@ class CreateAccount(View):
                 permissions += "0"
             cmd.text = "createAccount " + request.POST["username"] + " " + request.POST["password"] + permissions
             s = cmd.callCommand(request.POST["command"])
-            if "Failed" in s_list:
+            if "Failed" in s:
                 context = {"error": s}
             else:
                 context = {"list": s}
@@ -200,22 +200,21 @@ class EditAccount(View):
 
     def post(self, request):
         if "name" in request.session:
-
             cmd = setup.setupCommands()
-            if request.POST["password"]:
-                cmd.text = "editAccount " + request.POST["username"] + " password " + request.POST["password"]
-                cmd.callCommand(request.POST["command"])
-            cmd.text = "editAccount " + request.POST["username"] + " name " + request.POST["name"]
-            cmd.callCommand(request.POST["command"])
-            cmd.text = "editAccount " + request.POST["username"] + " address " + request.POST["address"]
-            cmd.callCommand(request.POST["command"])
-            cmd.text = "editAccount " + request.POST["username"] + " officehours " + request.POST["officehours"]
-            cmd.callCommand(request.POST["command"])
-            cmd.text = "editAccount " + request.POST["username"] + " phone " + request.POST["phone"]
-            cmd.callCommand(request.POST["command"])
-            cmd.text = "editAccount " + request.POST["username"] + " email " + request.POST["email"]
-            s = cmd.callCommand(request.POST["command"])
-            if "Failed" in s_list:
+            cmd.text = "editAccount " + request.POST["name"] + " password " + request.POST["password"]
+            cmd.callCommand(cmd.text)
+            cmd.text = "editAccount " + request.POST["name"] + " name " + request.POST["name"]
+            cmd.callCommand(cmd.text)
+            cmd.text = "editAccount " + request.POST["name"] + " address " + request.POST["address"]
+            cmd.callCommand(cmd.text)
+            cmd.text = "editAccount " + request.POST["name"] + " officehours " + request.POST["officehours"]
+            cmd.callCommand(cmd.text)
+            cmd.text = "editAccount " + request.POST["name"] + " phone " + request.POST["phone"]
+            cmd.callCommand(cmd.text)
+            cmd.text = "editAccount " + request.POST["name"] + " email " + request.POST["email"]
+            s = cmd.callCommand(cmd.text)
+            print(s)
+            if "Failed" in s:
                 context = {"error": s}
             else:
                 context = {"list": s}
@@ -324,11 +323,17 @@ class ViewLab(View):
     def get(self, request):
         if "name" in request.session:
             context = {"user":request.session["name"]}
+
         else:
             context = {"user":None}
         return render(request, "taapp/view_lab.html", context)
     def post(self, request):
-        pass
+        s = {}
+        labid = request.POST["labid"]
+        s['lab'] = (Course.objects.get(pk=labid))
+        s['ta'] = SectionMember.objects.get(section__pk=labid)
+        return render(request, "taapp/view_course.html", {"lab": s['lab'], "ta":s['ta']})
+
 
 
 class ViewAccount(View):
