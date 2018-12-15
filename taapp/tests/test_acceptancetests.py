@@ -532,3 +532,4 @@ class TestUserLogin(BaseCase):
         # Try logging in again to verify that it is not possible because you are already logged in
         ret = self.cmd.callCommand("login ian TA")
         self.assertEqual(ret, "Failed. User currently logged in")
+
