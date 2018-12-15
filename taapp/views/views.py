@@ -193,18 +193,25 @@ class EditAccount(View):
         if "name" in request.session:
             username = request.session["name"]
             cmd = setup.setupCommands()
-            cmd.text = "editAccount " + username + " password " + request.POST["password"]
-            cmd.callCommand(cmd.text)
-            cmd.text = "editAccount " + username + " name " + request.POST["name"]
-            cmd.callCommand(cmd.text)
-            cmd.text = "editAccount " + username + " address " + request.POST["address"]
-            cmd.callCommand(cmd.text)
-            cmd.text = "editAccount " + username + " officehours " + request.POST["officehours"]
-            cmd.callCommand(cmd.text)
-            cmd.text = "editAccount " + username + " phone " + request.POST["phone"]
-            cmd.callCommand(cmd.text)
-            cmd.text = "editAccount " + username + " email " + request.POST["email"]
-            s = cmd.callCommand(cmd.text)
+            s = ""
+            if request.POST["password"]:
+                cmd.text = "editAccount " + username + " password " + request.POST["password"]
+                s = cmd.callCommand(cmd.text)
+            if request.POST["name"]:
+                cmd.text = "editAccount " + username + " name " + request.POST["name"]
+                s = cmd.callCommand(cmd.text)
+            if request.POST["address"]:
+                cmd.text = "editAccount " + username + " address " + request.POST["address"]
+                s = cmd.callCommand(cmd.text)
+            if request.POST["officehours"]:
+                cmd.text = "editAccount " + username + " officehours " + request.POST["officehours"]
+                s = cmd.callCommand(cmd.text)
+            if request.POST["phone"]:
+                cmd.text = "editAccount " + username + " phone " + request.POST["phone"]
+                s = cmd.callCommand(cmd.text)
+            if request.POST["name"]:
+                cmd.text = "editAccount " + username + " email " + request.POST["email"]
+                s = cmd.callCommand(cmd.text)
             user = Account.objects.get(username=username)
             context = {"user": username, "userName": user.name, "userPassword": user.password, "userEmail": user.email, "userPhone": user.phone, "userAddress": user.address, "userHours": user.officehours, "list": s}
             return render(request, "taapp/edit_account.html", context)
