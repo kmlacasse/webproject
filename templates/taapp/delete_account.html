@@ -1,11 +1,11 @@
 {% extends "base.html" %}
 
 {% block content %}
-<h1 class="modifyButtonTitle">Delete an Account</h1><br>
-<h3>Please enter a valid Username<br>
+<p class="modifyButtonTitle">Delete an Account</p><br>
+
 <form method="post" action="delete_account.html" >
   {% csrf_token %}
-  <input type="text" id="username" name="username"/><br>
+  <p class="formText">Username: <input type="text" class="textInput" id="username" name="username"/></p><br>
   <input type="submit" class="submitModifyButton" value="Submit">
 </form>
 <br>
