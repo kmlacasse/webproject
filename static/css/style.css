@@ -1,17 +1,29 @@
-body {
-    padding-left: 45px;
-    padding-right: 45px;
+.bodyBackground {
+    background-color: papayawhip;
+    min-height: 100vh;
+
+}
+.bodyStyles {
+    padding-left: 44px;
+    padding-right: 44px;
+    background-color: maroon;
+
 }
 
 
 .navBar {
-   box-sizing: border-box;
-   margin: 0px;
-   padding: 10px;
-   border: 2px solid black;
-   background-color: red;
+    box-sizing: border-box;
+    margin: -1px;
+    padding: 10px;
+    border: 2px solid black;
+    background-color: lightgrey;
 }
-
+.navBarLink:hover {
+    background-color: lightskyblue;
+}
+.navBarLink:active {
+    background-color: darkgray;
+}
 .navBar::after {
     content: "";
     clear: both;
@@ -31,15 +43,26 @@ body {
     text-decoration: none;
     color: black;
 }
-.navBarLink:hover {
-    background-color: lightskyblue;
-}
-.navBarLink:active {
-    background-color: darkgray;
-}
+
 
 .textInput {
+    height: 20px;
     font-size: 12pt;
+
+}
+.textInput:focus {
+    border-color: #201952;
+}
+.selectDropdown {
+    height: 28px;
+}
+.selectDropdown:focus {
+    border-color: #201952;
+}
+
+.formText {
+    font-size: 16pt;
+    line-height: 2;
 }
 
 .homeWelcome {
@@ -52,6 +75,7 @@ body {
 }
 
 .modifyButton {
+    display: block;
     line-height: 2;
     border: 2px solid black;
     cursor: pointer;
@@ -68,6 +92,28 @@ body {
 .modifyButton:hover {
     background-color: aquamarine;
 }
+.mainPageTable {
+    padding: 10px;
+    border-spacing: 5px;
+    width: 100%;
+}
+.modifyButtonTitle {
+    text-align: center;
+    font-size: 28pt;
+    font-weight: bold;
+}
+
+.responseText {
+    padding-left: 20px;
+    font-size: 24px;
+}
+
+.buttonTypeTag {
+    text-align: left;
+    font-size: 24px;
+}
+
+
 
 .viewButton {
     line-height: 2;
@@ -91,6 +137,8 @@ body {
 .formText {
     padding-left: 20px;
     color: black;
+    display: inline;
+    font-size: 24px;
 }
 
 .fields {
@@ -102,10 +150,7 @@ body {
     font-size: 24pt;
     line-height: 0px;
 }
-.createCourseSelect {
-    font-size: 12pt;
-    padding: 3px
-}
+
 .submitModifyButton {
     background-color: indianred;
     border: 2px solid black;
@@ -113,5 +158,8 @@ body {
     padding: 8px 16px;
     cursor: pointer;
     font-size: 24px;
+    margin-left: 10px;
+    margin-top: 10px;
 }
+
 
