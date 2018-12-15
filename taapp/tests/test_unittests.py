@@ -418,6 +418,11 @@ class TestEditAccount(BaseCase):
         ret = self.cmd.callCommand("editAccount bill password instructor")
         self.assertEqual(ret, "Account bill successfully modified")
 
+        # John changes Bill's username to billy
+        ret = self.cmd.callCommand("editAccount bill username billy")
+        obj = Account.objects.get(username="bill")
+        self.assertEqual(obj.name, "billy")
+
 
 class TestViewUsers(BaseCase):
 
@@ -528,6 +533,7 @@ class TestViewCourse(BaseCase):
 
         #John logs out
         setup.current_user = None
+
 
     def testViewCourseInvalid(self):
         # No user logged in attempts to view course
