@@ -151,29 +151,19 @@ class CreateAccount(View):
         # Only process if someone is logged in
         if "name" in request.session:
             cmd = setup.setupCommands()
-            permissions = ""
-            if request.POST["role1"] is True:
-                permissions += "1"
-            else:
-                permissions += "0"
-            if request.POST["role2"] is True:
-                permissions += "1"
-            else:
-                permissions += "0"
-            if request.POST["role3"] is True:
-                permissions += "1"
-            else:
-                permissions += "0"
-            if request.POST["role4"] is True:
-                permissions += "1"
-            else:
-                permissions += "0"
-            cmd.text = "createAccount " + request.POST["username"] + " " + request.POST["password"] + permissions
-            s = cmd.callCommand(request.POST["command"])
-            if "Failed" in s:
-                context = {"error": s}
-            else:
-                context = {"list": s}
+            permissions = "0000"
+            roles = request.POST["role"]
+            if "supervisor" in roles:
+                permissions = "1" + permissions[1:]
+            if "administrator" in roles:
+                permissions = permissions[0] + "1" + permissions[2:]
+            if "instructor" in roles:
+                permissions = permissions[:2] + "1" + permissions[3]
+            if "ta" in roles:
+                permissions = permissions[:3] + "1"
+            cmd.text = "createAccount " + request.POST["username"] + " " + request.POST["password"] + " " + permissions
+            s = cmd.callCommand(cmd.text)
+            context = {"list": s}
             return render(request, "taapp/create_account.html", context)
         else:
             # If not logged in, redirect to login screen with error message
