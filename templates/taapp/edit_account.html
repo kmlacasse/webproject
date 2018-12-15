@@ -1,23 +1,46 @@
 {% extends "modifyButtons.html" %}
 {% block content %}
- <p class="modifyButtonTitle">Create an Account</p>
-    <form action="edit_account.html" method="post"> {% csrf_token %}
-        <div class="editAccountFields">
-            <p class="formText"> Username: <input type="text" name="username" class="textInput"></p><br>
-            <p class="formText"> Password: <input type="password" name="password" class="textInput"></p><br>
-            <p class="formText"> Role: <br>
-                <input type="checkbox" name="role" value="Supervisor"> Supervisor<br>
-                <input type="checkbox" name="role" value="Administrator"> Administrator<br>
-                <input type="checkbox" name="role" value="Instructor"> Instructor<br>
-                <input type="checkbox" name="role" value="TA"> TA<br>
-            </p>
-            <p class="formText"> Email: <input type="text" name="email" class="textInput"></p><br>
-            <p class="formText"> Phone: <input type="text" name="phone" class="textInput"></p><br>
-            <p class="formText"> Address: <input type="text" name="address" class="textInput"></p><br>
-            <p class="formText"> Office Hours: <input type="text" name="officehours" class="textInput"></p><br>
-        </div>
-        <input type="submit" class="submitModifyButton" value="Submit">
-    </form><br>
+ <p class="modifyButtonTitle">Edit an Account</p>
+    {% if permissions == True %}
+        <form action="view_account.html" method="post">
+            {%  csrf_token %}
+            <input type="text" name="name">
+            <input type="submit" class="submitModifyButton" value="Submit">
+        </form>
 
+        {% if error %}
+            {{ error }}
+        {% endif %}
+        {% if list_private %}
+            <br/>
+            <form action="edit_account.html" method="post"> {% csrf_token %}
+                <div class="editAccountFields">
+                    <p> Account information for {{ list_private.0 }}</p><br>
+                    <p class="formText"> Name: <input type="text" name="name" class="textInput" value="{{ list_private.1 }}"></p><br>
+                    <p class="formText"> Email: <input type="text" name="email" class="textInput" value="{{ list_private.2 }}"></p><br>
+                    <p class="formText"> Phone: <input type="text" name="phone" class="textInput" value="{{ list_private.4 }}"></p><br>
+                    <p class="formText"> Address: <input type="text" name="address" class="textInput" value="{{ list_private.5 }}"></p><br>
+                    <p class="formText"> Office Hours: <input type="text" name="officehours" class="textInput" value="{{ list_private.3 }}"></p><br>
+                </div>
+                <input type="submit" class="submitModifyButton" value="Submit">
+            </form><br>
+        {% else %}
+            {{ list }}
+        {% endif %}
+
+    {% else %}
+        <form action="edit_account.html" method="post"> {% csrf_token %}
+            <div class="editAccountFields">
+                <p> Account information for {{ user }}</p><br>
+                <p class="formText"> Name: <input type="text" name="name" class="textInput"></p><br>
+                <p class="formText"> Password: <input type="password" name="password" class="textInput"></p><br>
+                <p class="formText"> Email: <input type="text" name="email" class="textInput"></p><br>
+                <p class="formText"> Phone: <input type="text" name="phone" class="textInput"></p><br>
+                <p class="formText"> Address: <input type="text" name="address" class="textInput"></p><br>
+                <p class="formText"> Office Hours: <input type="text" name="officehours" class="textInput"></p><br>
+            </div>
+            <input type="submit" class="submitModifyButton" value="Submit">
+        </form><br>
+    {% endif %}
     <p1 class="responseField"> Response: </p1><br>
 {% endblock content %}

@@ -166,8 +166,10 @@ class EditAccount(View):
         # Make sure someone is logged in before showing this page
         if "name" in request.session:
             username = request.session["name"]
-            context = {"user": username}
-            return render(request, "taapp/create_account.html", context)
+            user = Account.objects.get(username=username)
+            hasPermissions = user.permissions[0] == '1' or user.permissions[1] == '1'
+            context = {"user": username, "permissions": hasPermissions, "userPassword": user.password, "userEmail": user.email, "userPhone": user.phone, "userAddress": user.address, "userHours": user.officehours}
+            return render(request, "taapp/edit_account.html", context)
         else:
             # Redirect to login screen with error message
             s = "You must login to view this website"
@@ -177,15 +179,9 @@ class EditAccount(View):
     def post(self, request):
         if "name" in request.session:
             cmd = setup.setupCommands()
-            permissions = ""
-            for i in request.POST["checkbox"]:
-                if i is True:
-                    permissions += "1"
-                else:
-                    permissions += "0"
-            cmd.text = "editAccount " + request.POST["username"] + " " + request.POST["password"] + " " + permissions + " " + request.POST["email"] + " " + request.POST["phone"] + " " + request.POST["password"]
+            cmd.text = ["editAccount", request.POST["username"], request.POST["password"], request.POST["email"], request.POST["phone"], request.POST["address"], request.POST["officehours"]]
             s = cmd.callCommand(request.POST["command"])
-            return render(request, "taapp/create_account.html", {"list": s})
+            return render(request, "taapp/edit_account.html", {"list": s})
         else:
             # If not logged in, redirect to login screen with error message
             s = "You must login to view this website"
