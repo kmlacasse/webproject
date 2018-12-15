@@ -94,7 +94,7 @@ class TestSupervisorCreateAccount(BaseCase):
         # John logs in
         self.c.post('http://127.0.0.1:8000/login.html', {'username': 'john', 'password': 'super'})
         # John creates an account which does not yet exist
-        ret = self.c.post('http://127.0.0.1:8000/create_account.html', {'username': 'tim', 'password':'default','role':'1000'})
+        ret = self.c.post('http://127.0.0.1:8000/create_account.html', {'username': 'tim', 'password':'default','role':'supervisor'})
         self.assertIn(b"Account tim successfully added", ret.content)
         # Login to new account to verify that it was created
         self.c.post('http://127.0.0.1:8000/logout.html')
@@ -110,7 +110,7 @@ class TestSupervisorDeleteAccount(BaseCase):
         # John logs in
         self.c.post('http://127.0.0.1:8000/login.html', {'username': 'john', 'password': 'super'})
         # John creates an account which does not yet exist
-        ret = self.c.post('http://127.0.0.1:8000/create_account.html', {'username': 'tim', 'password':'default','role':'1000'})
+        ret = self.c.post('http://127.0.0.1:8000/create_account.html', {'username': 'tim', 'password':'default','role':'supervisor'})
         self.assertIn(b"Account tim successfully added", ret.content)
         # John deletes the account
         ret = self.c.post('http://127.0.0.1:8000/delete_account.html', {'username': 'tim'})
@@ -211,7 +211,7 @@ class TestSupervisorAssignTAtoCourse(BaseCase):
         self.assertIn(b"tim successfully assigned", ret.content)
         # Create a TA
         self.c.post('http://127.0.0.1:8000/create_account.html',
-                          {'username': 'logan', 'password': 'pass123', 'role': '0001'})
+                          {'username': 'logan', 'password': 'pass123', 'role': 'ta'})
         # John assigns a TA to a course
         self.c.post('http://127.0.0.1:8000/assign_TA.html', {'username':'logan', 'courseID':'01361'})
 
@@ -239,12 +239,12 @@ class TestSupervisorAssignTAtoLab(BaseCase):
                           {'username': 'tim', 'courseID': '01361', 'lecture': '1'})
         self.assertIn(b"tim successfully assigned", ret.content)
         # Create a TA
-        self.c.post('http://127.0.0.1:8000/create_account.html', {'username': 'logan', 'password': 'pass123', 'role': '0001'})
+        self.c.post('http://127.0.0.1:8000/create_account.html', {'username': 'logan', 'password': 'pass123', 'role': 'ta'})
         # John assigns a TA to a course
         self.c.post('http://127.0.0.1:8000/assign_TA.html', {'username':'logan', 'courseID':'01361'})
         # John assigns a TA to a lab section
-        ret = self.c.post('http://127.0.0.1:8000/assign_TA.html', {'username': 'logan', 'courseID': '01361101'})
-        self.assertIn(b"logan successfully assigned", ret.content)
+        ret = self.c.post('http://127.0.0.1:8000/assign_TA_to_lab.html', {'username': 'logan', 'courseID': '01361', 'lab':'101'})
+        self.assertIn(b"successfully assigned", ret.content)
 
 
 class TestSupervisorAssignInstructortoCourse(BaseCase):
@@ -315,7 +315,7 @@ class TestAdministratorCreateAccount(BaseCase):
         # Rick logs in
         self.c.post('http://127.0.0.1:8000/login.html', {'username': 'rick', 'password': 'admin'})
         # Rick creates an account which does not yet exist
-        ret = self.c.post('http://127.0.0.1:8000/create_account.html', {'username': 'tim', 'password':'default','role':'1000'})
+        ret = self.c.post('http://127.0.0.1:8000/create_account.html', {'username': 'tim', 'password':'default','role':'supervisor'})
         self.assertIn(b"Account tim successfully added", ret.content)
         # Login to new account to verify that it was created
         self.c.post('http://127.0.0.1:8000/logout.html')
@@ -331,7 +331,7 @@ class TestAdministratorDeleteAccount(BaseCase):
         # Rick logs in
         self.c.post('http://127.0.0.1:8000/login.html', {'username': 'rick', 'password': 'admin'})
         # Rick creates an account which does not yet exist
-        ret = self.c.post('http://127.0.0.1:8000/create_account.html', {'username': 'tim', 'password':'default','role':'1000'})
+        ret = self.c.post('http://127.0.0.1:8000/create_account.html', {'username': 'tim', 'password':'default','role':'supervisor'})
         self.assertIn(b"Account tim successfully added", ret.content)
         # Rick deletes the account
         ret = self.c.post('http://127.0.0.1:8000/delete_account.html', {'username': 'tim'})
@@ -426,6 +426,11 @@ class TestInstructorViewAssignmentInstructor(BaseCase):
 class TestInstructorAssignTAtoLab(BaseCase):
     # AT for PBI 21: As an Instructor, I want to be able to assign my TAS to particular lab sections through a webpage
 
+    def tearDown(self):
+        # Remove the created and modified account
+        self.cmd.callCommand("deleteAccount nate")
+        self.cmd.callCommand("deleteCourse 01361")
+
     def testInstructorAssignTAtoLab(self):
         # John logs in
         self.c.post('http://127.0.0.1:8000/login.html', {'username': 'john', 'password': 'super'})
@@ -441,21 +446,16 @@ class TestInstructorAssignTAtoLab(BaseCase):
         self.assertIn(b"tim successfully assigned", ret.content)
         # Create a TA
         self.c.post('http://127.0.0.1:8000/create_account.html',
-                    {'username': 'logan', 'password': 'pass123', 'role': '0001'})
-        # Assign a TA to a course
-        self.c.post('http://127.0.0.1:8000/assign_TA.html', {'username':'logan', 'courseID':'01361'})
+                    {'username': 'nate', 'password': 'pass123', 'role': 'ta'})
+        # John assigns a TA to a course
+        ret = self.c.post('http://127.0.0.1:8000/assign_TA.html', {'username': 'nate', 'courseID': '01361'})
+        self.assertIn(b"nate successfully assigned", ret.content)
         # Assume Tim is an Instructor
         self.c.post('http://127.0.0.1:8000/logout.html')
         self.c.post('http://127.0.0.1:8000/login.html', {'username': 'tim', 'password': 'default'})
-        # Tim assigns a TA to a lab section
-        ret = self.c.post('http://127.0.0.1:8000/assign_TA.html', {'username': 'logan', 'courseID': '01361101'})
-        self.assertIn(b"logan successfully assigned", ret.content)
-        # Assume TA Bob is assigned to course 01361
-        ret = self.c.post('http://127.0.0.1:8000/assign_TA_to_lab.html', {'name': 'bob', 'course':'01361', 'lab':'101'})
-        self.assertIn(b"bob successfully assigned", ret.content)
-
-        #ret = self.cmd.callCommand("viewCourse 01361")
-        #self.assertIn("01 - bob", ret)
+        # Assume TA Nate is assigned to course 01361
+        ret = self.c.post('http://127.0.0.1:8000/assign_TA_to_lab.html', {'username': 'nate', 'courseID':'01361', 'lab':'102'})
+        self.assertIn(b"successfully assigned", ret.content)
 
 
 class TestInstructorViewPublicInfo(BaseCase):
