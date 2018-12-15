@@ -15,7 +15,7 @@
             <br/>
             <form action="edit_account.html" method="post"> {% csrf_token %}
                 <div class="editAccountFields">
-                    <p> Account information for {{ list_private.0 }}</p><br>
+                    <p name="username"> Account information for {{ list_private.0 }}</p><br>
                     <p class="formText"> Name: <input type="text" name="name" class="textInput" value="{{ list_private.1 }}"></p><br>
                     <p class="formText"> Email: <input type="text" name="email" class="textInput" value="{{ list_private.2 }}"></p><br>
                     <p class="formText"> Phone: <input type="text" name="phone" class="textInput" value="{{ list_private.4 }}"></p><br>
@@ -31,16 +31,16 @@
     {% else %}
         <form action="edit_account.html" method="post"> {% csrf_token %}
             <div class="editAccountFields">
-                <p> Account information for {{ user }}</p><br>
-                <p class="formText"> Name: <input type="text" name="name" class="textInput"></p><br>
-                <p class="formText"> Password: <input type="password" name="password" class="textInput"></p><br>
-                <p class="formText"> Email: <input type="text" name="email" class="textInput"></p><br>
-                <p class="formText"> Phone: <input type="text" name="phone" class="textInput"></p><br>
-                <p class="formText"> Address: <input type="text" name="address" class="textInput"></p><br>
-                <p class="formText"> Office Hours: <input type="text" name="officehours" class="textInput"></p><br>
+                <p name="username">{{ user }}</p><br>
+                <p class="formText"> Name: <input type="text" name="name" class="textInput" value="{{ userName }}"></p><br>
+                <p class="formText"> Password: <input type="password" name="password" class="textInput" value="{{ userPassword }}"></p><br>
+                <p class="formText"> Email: <input type="text" name="email" class="textInput" value="{{ userEmail }}"></p><br>
+                <p class="formText"> Phone: <input type="text" name="phone" class="textInput" value="{{ userPhone }}"></p><br>
+                <p class="formText"> Address: <input type="text" name="address" class="textInput" value="{{ userAddress }}"></p><br>
+                <p class="formText"> Office Hours: <input type="text" name="officehours" class="textInput" value="{{ userName }}"></p><br>
             </div>
             <input type="submit" class="submitModifyButton" value="Submit">
         </form><br>
     {% endif %}
-    <p1 class="responseField"> Response: </p1><br>
+    <p1 class="responseField"> {{ list }} </p1><br>
 {% endblock content %}
