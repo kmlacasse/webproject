@@ -2,7 +2,6 @@
 {% block content %}
  <p class="modifyButtonTitle">Edit an Account</p>
     <form action="edit_account.html" method="post"> {% csrf_token %}
-            <p name="username">{{ user }}</p><br>
             <p class="formText"> Name: <input type="text" name="name" class="textInput" value="{{ userName }}"></p><br>
             <p class="formText"> Password: <input type="password" name="password" class="textInput" value="{{ userPassword }}"></p><br>
             <p class="formText"> Email: <input type="text" name="email" class="textInput" value="{{ userEmail }}"></p><br>
