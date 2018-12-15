@@ -121,7 +121,6 @@ class TestSupervisorDeleteAccount(BaseCase):
         self.assertIn(b"Failed. No such username", ret.content)
 
 
-@skip("Save for a future Sprint")
 class TestSupervisorEditAccount(BaseCase):
     # AT for PBI 7:  As a Supervisor, I want to edit an account through a webpage
 
@@ -132,17 +131,11 @@ class TestSupervisorEditAccount(BaseCase):
     def testSupervisorEditAccount(self):
         # John has a supervisor account
         # John logs in
-        self.cmd.callCommand("login john super")
-        # Create the user account that will be modified
-        self.cmd.callCommand("createAccount tim default 0100")
-        # John edits an account for an existing user
-        ret = self.cmd.callCommand("editAccount tim")
-        # Assume John made a change to the account
-        self.assertEqual(ret, "Account tim successfully modified")
-        # View account to verify that changes are shown
-        ret = self.cmd.callCommand("viewAccount tim")
-        self.assertEqual(ret, "tim: all information")
-        # Assume John can see the account changes
+        self.c.post('http://127.0.0.1:8000/login.html', {'username': 'john', 'password': 'super'})
+        ret = self.c.post('http://127.0.0.1:8000/edit_account.html', {"password":"super", "name":"John L", "phone":" ", "address":" ", "officehours": " ", "email":"john@uwm.edu"})
+        self.assertIn(b"Account john successfully modified", ret.content)
+        ret = self.c.post('http://127.0.0.1:8000/view_account.html', {'name': 'john'})
+        self.assertIn(b"john@uwm.edu", ret.content)
 
 
 class TestSupervisorViewSectionsCourse(BaseCase):
@@ -162,7 +155,7 @@ class TestSupervisorViewSectionsCourse(BaseCase):
                           {'courseSub': '01', 'courseNum': '361', 'lectureNum': '1', 'labNum': '3',
                            'courseName': 'Introduction to Software Engineering'})
         # John views a course which exists
-        ret = self.c.post('http://127.0.0.1:8000/view_course.html', {'courseid': '01361'})
+        ret = self.c.post('http://127.0.0.1:8000/view_lecture.html', {'lectureid': '013611'})
         self.assertIn(b"1", ret.content)
 
 
@@ -180,11 +173,11 @@ class TestSupervisorViewLabsCourse(BaseCase):
         self.c.post('http://127.0.0.1:8000/login.html', {'username': 'john', 'password': 'super'})
         # Create a course which will be viewed
         ret = self.c.post('http://127.0.0.1:8000/create_course.html',
-                          {'courseSub': '01', 'courseNum': '361', 'lectureNum': '1', 'labNum': '3',
+                          {'courseSub': '01', 'courseNum': '361', 'lectureNum': '1', 'labNum': '2',
                            'courseName': 'Introduction to Software Engineering'})
         # John views a course which exists
-        ret = self.c.post('http://127.0.0.1:8000/view_course.html', {'courseid': '01361'})
-        self.assertIn(b"3", ret.content)
+        ret = self.c.post('http://127.0.0.1:8000/view_lab.html', {'labid': '01361102'})
+        self.assertIn(b"2", ret.content)
 
 
 class TestSupervisorAssignTAtoCourse(BaseCase):
@@ -342,62 +335,56 @@ class TestAdministratorDeleteAccount(BaseCase):
         self.assertIn(b"Failed. No such username", ret.content)
 
 
-@skip("Save for a future Sprint")
 class TestAdministratorEditAccount(BaseCase):
     # AT for PBI 17:  As an administrator, I want to edit an account through a webpage
-
-    def tearDown(self):
-        # Remove the created and modified account
-        self.cmd.callCommand("deleteAccount tim")
 
     def testAdministratorEditAccount(self):
         # Rick has an administrator account
         # Rick logs in
-        self.cmd.callCommand("login rick admin")
-        # Create the user account that will be modified
-        self.cmd.callCommand("createAccount tim default 0010")
-        # Rick edits an account for an existing user
-        ret = self.cmd.callCommand("editAccount tim")
-        # Assume Rick changes the account
-        self.assertEqual(ret, "Account tim successfully modified")
-        # View account to verify that changes are shown
-        ret = self.cmd.callCommand("viewAccount tim")
-        self.assertEqual(ret, "tim: all information")
-        # Assume Rick can see the account changes
+        self.c.post('http://127.0.0.1:8000/login.html', {'username': 'rick', 'password': 'admin'})
+        ret = self.c.post('http://127.0.0.1:8000/edit_account.html', {"password":"admin", "name":"Rick O", "phone":" ", "address":" ", "officehours": " ", "email":"rick@uwm.edu"})
+        self.assertIn(b"Account rick successfully modified", ret.content)
+        ret = self.c.post('http://127.0.0.1:8000/view_account.html', {'name': 'rick'})
+        self.assertIn(b"rick@uwm.edu", ret.content)
 
 
-@skip("Save for a future Sprint")
 class TestInstructorViewTA(BaseCase):
     # AT for PBI 18: As an instructor, I want to view the TAs assigned to my courses through a webpage
 
     def testInstructorViewTA(self):
+        # John has a supervisor account
+        # John logs in
+        self.c.post('http://127.0.0.1:8000/login.html', {'username': 'john', 'password': 'super'})
+        # Create a course
+        ret = self.c.post('http://127.0.0.1:8000/create_course.html',
+                          {'courseSub': '01', 'courseNum': '361', 'lectureNum': '1', 'labNum': '3',
+                           'courseName': 'Introduction to Software Engineering'})
+        # Create an instructor
+        self.cmd.callCommand("createAccount tim default 0010")
+        # John assigns an instructor to a course
+        ret = self.c.post('http://127.0.0.1:8000/assign_instructor.html',
+                          {'username': 'tim', 'courseID': '01361', 'lecture': '1'})
+        self.assertIn(b"tim successfully assigned", ret.content)
+        self.c.post('http://127.0.0.1:8000/logout.html')
         # Assume Bill is an Instructor
         # Bill logs in
-        self.cmd.callCommand("login bill instructor")
-
-        # Assume there is a course with ID 01361
-        # Assume Bill is an instructor of said course
+        self.c.post('http://127.0.0.1:8000/login.html', {'username': 'bill', 'password': 'instructor'})
         # Assume bob is a TA of said course
-        ret = self.cmd.callCommand("viewCourse 01361")
+        ret = self.c.post('http://127.0.0.1:8000/view_course.html', {'courseid': '01361'})
         self.assertIn("bob", ret)
-        ret = self.cmd.callCommand("assignTAtoLab tim")
-        self.assertEqual(ret, "bob successfully assigned to lab section")
 
 
-@skip("Save for a future Sprint")
 class TestInstructorEditPersonalInfo(BaseCase):
     # At for PBI 19: As an Instructor, I want to edit my personal contact information through a webpage
 
     def testInstructorEditPersonalInfo(self):
         # Assume Bill is an Instructor
         # Bill logs in
-        self.cmd.callCommand("login bill instructor")
-
-        ret = self.cmd.callCommand("editAccount bill")
-        self.assertEqual("Account bill successfully modified", ret)
-        ret = self.cmd.callCommand("viewAccount bill")
-        # Assuming bill changed his phone number to (414)555-5555
-        self.assertIn("(414)555-5555", ret)
+        self.c.post('http://127.0.0.1:8000/login.html', {'username': 'bill', 'password': 'instructor'})
+        ret = self.c.post('http://127.0.0.1:8000/edit_account.html', {"password":"instructor", "name":"Bill R", "phone":" ", "address":" ", "officehours": " ", "email":"bill@uwm.edu"})
+        self.assertIn(b"Account bill successfully modified", ret.content)
+        ret = self.c.post('http://127.0.0.1:8000/view_account.html', {'name': 'bill'})
+        self.assertIn(b"bill@uwm.edu", ret.content)
 
 
 class TestInstructorViewAssignmentInstructor(BaseCase):
@@ -473,32 +460,53 @@ class TestInstructorViewPublicInfo(BaseCase):
         self.assertIn(b"john", ret.content)
 
 
-@skip("Save for a future Sprint")
 class TestTAEditPersonalInfo(BaseCase):
     # AT for PBI 23: As a TA, I want to be able to edit my own contact information through a webpage
 
     def testTAEditPersonalInfo(self):
         # Assume ian is a TA
-        self.cmd.callCommand("login ian TA")
-
-        ret = self.cmd.callCommand("editAccount ian")
-        self.assertEqual(ret, "Account ian successfully modified")
-        ret = self.cmd.callCommand("viewAccount ian")
-        # Assume ian changed his phone number to (414)555-5555
-        self.assertIn("(414)555-5555", ret)
+        self.c.post('http://127.0.0.1:8000/login.html', {'username': 'ian', 'password': 'TA'})
+        ret = self.c.post('http://127.0.0.1:8000/edit_account.html', {"password":"TA", "name":"Ian M", "phone":" ", "address":" ", "officehours": " ", "email":"ian@uwm.edu"})
+        self.assertIn(b"Account ian successfully modified", ret.content)
+        ret = self.c.post('http://127.0.0.1:8000/view_account.html', {'name': 'ian'})
+        self.assertIn(b"ian@uwm.edu", ret.content)
 
 
-@skip("Waiting to implement")
 class TestTAViewAssignments(BaseCase):
     # AT for PBI 24: As a TA, I want to be able to view TA assignments through a webpage
 
     def testTAViewAssignments(self):
-        # Assume ian is a TA
-        self.c.post('http://127.0.0.1:8000/login.html', {'username': 'ian', 'password': 'TA'})
-
-        # Assume ian is assigned to course 01361 lab 01
-        ret = self.c.post('http://127.0.0.1:8000/view_TA_assignments.html', {'username': 'ian'})
+        # John logs in
+        self.c.post('http://127.0.0.1:8000/login.html', {'username': 'john', 'password': 'super'})
+        # Create a course
+        ret = self.c.post('http://127.0.0.1:8000/create_course.html',
+                          {'courseSub': '01', 'courseNum': '361', 'lectureNum': '1', 'labNum': '3',
+                           'courseName': 'Introduction to Software Engineering'})
+        # Create an instructor
+        self.cmd.callCommand("createAccount tim default 0010")
+        # John assigns an instructor to a course
+        ret = self.c.post('http://127.0.0.1:8000/assign_instructor.html',
+                          {'username': 'tim', 'courseID': '01361', 'lecture': '1'})
+        self.assertIn(b"tim successfully assigned", ret.content)
+        # Create a TA
+        self.c.post('http://127.0.0.1:8000/create_account.html',
+                    {'username': 'nate', 'password': 'pass123', 'role': 'ta'})
+        # John assigns a TA to a course
+        ret = self.c.post('http://127.0.0.1:8000/assign_TA.html', {'username': 'nate', 'courseID': '01361'})
+        self.assertIn(b"nate successfully assigned", ret.content)
+        # Assume Tim is an Instructor
+        self.c.post('http://127.0.0.1:8000/logout.html')
+        self.c.post('http://127.0.0.1:8000/login.html', {'username': 'tim', 'password': 'default'})
+        # Assume TA Nate is assigned to course 01361
+        ret = self.c.post('http://127.0.0.1:8000/assign_TA_to_lab.html', {'username': 'nate', 'courseID':'01361', 'lab':'102'})
+        self.assertIn(b"successfully assigned", ret.content)
+        # Nate logs in
+        self.c.post('http://127.0.0.1:8000/logout.html')
+        self.c.post('http://127.0.0.1:8000/login.html', {'username': 'nate', 'password': 'pass123'})
+        # Assume Nate is assigned to course 01361 lab 01
+        ret = self.c.post('http://127.0.0.1:8000/view_TA_assignments.html', {'username': 'nate'})
         self.assertIn(b"Introduction to Software Engineering", ret.content)
+
 
 class TestTAViewPublicInfo(BaseCase):
     # AT for PBI 25: As a TA, I want to be able to read the public contact information of all users
