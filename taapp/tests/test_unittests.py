@@ -382,25 +382,25 @@ class TestEditAccount(BaseCase):
         setup.current_user = None
 
         # Attempt to change Bill's password
-        ret = self.cmd.callCommand("changePassword bill invalid")
+        ret = self.cmd.callCommand("editAccount bill password invalid")
         self.assertEqual(ret, "Failed. No user currently logged in")
 
         # Bill logs in
         setup.current_user = Account.objects.get(username="bill")
 
         # Bill enters invalid parameters
-        ret = self.cmd.callCommand("changePassword bill")
+        ret = self.cmd.callCommand("editAccount bill")
         self.assertEqual(ret, "Failed. Invalid parameters")
 
         # Bill tries to edit John's password
-        ret = self.cmd.callCommand("changePassword john invalid")
+        ret = self.cmd.callCommand("editAccount john password invalid")
         self.assertEqual(ret, "Failed. Restricted action")
 
         # Bill logs out and John logs in
         setup.current_user = Account.objects.get(username="john")
 
         # John tries to change Mike's password, Mike doesn't exist
-        ret = self.cmd.callCommand("changePassword mike invalid")
+        ret = self.cmd.callCommand("editAccount mike password invalid")
         self.assertEqual(ret, "Failed. Username doesn't exist")
 
     def testEditAccountValid(self):
@@ -408,15 +408,15 @@ class TestEditAccount(BaseCase):
         setup.current_user = Account.objects.get(username="bill")
 
         # Bill changes his password
-        ret = self.cmd.callCommand("changePassword bill valid")
-        self.assertEqual(ret, "bill password successfully changed")
+        ret = self.cmd.callCommand("editAccount bill password valid")
+        self.assertEqual(ret, "Account bill successfully modified")
 
         # Bill logs out and John logs in
         setup.current_user = Account.objects.get(username="john")
 
         # John changes Bill's password back
-        ret = self.cmd.callCommand("changePassword bill instructor")
-        self.assertEqual(ret, "bill password successfully changed")
+        ret = self.cmd.callCommand("editAccount bill password instructor")
+        self.assertEqual(ret, "Account bill successfully modified")
 
 
 class TestViewUsers(BaseCase):
