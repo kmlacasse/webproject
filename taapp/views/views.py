@@ -102,6 +102,8 @@ class CreateCourse(View):
         return render(request, "taapp/create_course.html", context)
 
     def post(self, request):
+        if "name" in request.session:
+            setup.current_user = Account.objects.get(pk=request.session["name"])
         s = {}
         cNum = request.POST["courseNum"]
         cName = request.POST["courseName"]
@@ -125,6 +127,8 @@ class DeleteCourse(View):
         return render(request, "taapp/delete_course.html", context)
 
     def post(self, request):
+        if "name" in request.session:
+            setup.current_user = Account.objects.get(pk=request.session["name"])
         s = {}
         courseid = request.POST["courseid"]
         cmd = setup.setupCommands()
@@ -152,6 +156,7 @@ class CreateAccount(View):
     def post(self, request):
         # Only process if someone is logged in
         if "name" in request.session:
+            setup.current_user = Account.objects.get(pk=request.session["name"])
             cmd = setup.setupCommands()
             permissions = "0000"
             roles = request.POST["role"]
@@ -174,7 +179,6 @@ class CreateAccount(View):
             return render(request, "taapp/login.html", context)
 
 
-
 class EditAccount(View):
     def get(self, request):
         # Make sure someone is logged in before showing this page
@@ -191,6 +195,7 @@ class EditAccount(View):
 
     def post(self, request):
         if "name" in request.session:
+            setup.current_user = Account.objects.get(pk=request.session["name"])
             username = request.session["name"]
             cmd = setup.setupCommands()
             s = ""
@@ -227,11 +232,12 @@ class DeleteAccount(View):
         if "name" in request.session:
             context = {"user":request.session["name"]}
             context['accounts'] = list(Account.objects.values())
-
         else:
             context = {"user":None}
         return render(request, "taapp/delete_account.html", context)
     def post(self, request):
+        if "name" in request.session:
+            setup.current_user = Account.objects.get(pk=request.session["name"])
         s = {}
         username = request.POST["username"]
         cmd = setup.setupCommands()
@@ -251,10 +257,13 @@ class AssignInstructor(View):
             context = {"user":None, "list": ''}
         return render(request, "taapp/assign_instructor.html", context)
     def post(self, request):
+        if "name" in request.session:
+            setup.current_user = Account.objects.get(pk=request.session["name"])
         cmd = setup.setupCommands()
         cmd.text = "assignInstructor " + request.POST["username"] + " " + request.POST["courseID"] + request.POST["lecture"]
         s = cmd.callCommand(cmd.text)
         return render(request, "taapp/assign_instructor.html", {"list": s})
+
 
 class AssignTA(View):
     def get(self, request):
@@ -264,6 +273,8 @@ class AssignTA(View):
             context = {"user":None, "list": ''}
         return render(request, "taapp/assign_TA.html", context)
     def post(self, request):
+        if "name" in request.session:
+            setup.current_user = Account.objects.get(pk=request.session["name"])
         cmd = setup.setupCommands()
         cmd.text = "assignTA " + request.POST["username"] + " " + request.POST["courseID"]
         s = cmd.callCommand(cmd.text)
@@ -278,6 +289,8 @@ class AssignTAtoLab(View):
             context = {"user":None, "list": ''}
         return render(request, "taapp/assign_TA_to_lab.html", context)
     def post(self, request):
+        if "name" in request.session:
+            setup.current_user = Account.objects.get(pk=request.session["name"])
         cmd = setup.setupCommands()
         cmd.text = "assignTAtoLab " + request.POST["username"] + " " + request.POST["courseID"] + request.POST["lab"]
         s = cmd.callCommand(cmd.text)
@@ -294,6 +307,8 @@ class ViewCourse(View):
             context = {"user":None}
         return render(request, "taapp/view_course.html", context)
     def post(self, request):
+        if "name" in request.session:
+            setup.current_user = Account.objects.get(pk=request.session["name"])
         s = {}
         courseid = request.POST["courseid"]
         s['course'] = (Course.objects.get(pk=courseid))
@@ -312,6 +327,8 @@ class ViewLecture(View):
             context = {"user":None}
         return render(request, "taapp/view_lecture.html", context)
     def post(self, request):
+        if "name" in request.session:
+            setup.current_user = Account.objects.get(pk=request.session["name"])
         lecture = request.POST["lectureid"]
         cmd = setup.setupCommands()
         cmd.text = "viewLecture " + lecture
@@ -328,6 +345,8 @@ class ViewLab(View):
             context = {"user":None}
         return render(request, "taapp/view_lab.html", context)
     def post(self, request):
+        if "name" in request.session:
+            setup.current_user = Account.objects.get(pk=request.session["name"])
         lab = request.POST["labid"]
         cmd = setup.setupCommands()
         cmd.text = "viewLab " + lab
@@ -399,6 +418,8 @@ class ViewInstructorAssignments(View):
             context = {"user":None, "list": ''}
         return render(request, "taapp/view_instructor_assignments.html", context)
     def post(self, request):
+        if "name" in request.session:
+            setup.current_user = Account.objects.get(pk=request.session["name"])
         cmd = setup.setupCommands()
         cmd.text = "viewInstructorAssignments " + request.POST["username"]
         s_list = cmd.callCommand(cmd.text)
@@ -416,6 +437,8 @@ class ViewTAAssignments(View):
             context = {"user":None, "list": ''}
         return render(request, "taapp/view_TA_assignments.html", context)
     def post(self, request):
+        if "name" in request.session:
+            setup.current_user = Account.objects.get(pk=request.session["name"])
         cmd = setup.setupCommands()
         cmd.text = "viewTAAssignments " + request.POST["username"]
         s_list = cmd.callCommand(cmd.text)
