@@ -92,7 +92,7 @@ class Logout(View):
 
 
 class CreateCourse(View):
-   def get(self, request):
+    def get(self, request):
         if "name" in request.session:
             context = {"user":request.session["name"]}
         else:
