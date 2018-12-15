@@ -1,6 +1,16 @@
 {% extends "modifyButtons.html" %}
-
 {% block content %}
-<p class="modifyButtonTitle">Create an Account</p>
+ <p class="modifyButtonTitle">Create an Account</p>
+    <form action="create_account.html" method="post"> {% csrf_token %}
+        <div class="createAccountFields">
+            <p class="formText"> Username: <input type="text" name="username" class="textInput"></p><br>
+            <p class="formText"> Password: <input type="password" name="password" class="textInput"></p><br>
+            <p class="formText"> Role: <input type="text" name="role" class="textInput"></p><br>
+            <p class="formText">Enter the roles for this account separated by spaces, all lowercase</p><br>
+            <p class="formText">Available roles: supervisor, administrator, instructor, ta</p><br>
+        </div>
+        <input type="submit" class="submitModifyButton" value="Submit">
+    </form><br>
 
+    <p1 class="responseField"> Response: {{ list }}</p1><br>
 {% endblock content %}
